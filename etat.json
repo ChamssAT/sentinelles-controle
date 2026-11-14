@@ -9,10 +9,10 @@
   "lien_apk": "",
   "notes": "",
   "annonce": {
-    "active": false,
-    "id": "",
-    "titre": "",
-    "texte": ""
+    "active": true,
+    "id": "amwgxiwbt",
+    "titre": "Annonce",
+    "texte": "salut"
   },
   "appareils_bloques": [],
   "message_appareil": "Cet appareil n'est plus autorisé à lancer le jeu. Contactez le développeur.",
