@@ -205,7 +205,7 @@ details summary { cursor: pointer; color: var(--doux); }
         <input id="version-min" type="number" min="0">
         <label for="versions-bloquees">Versions bloquées (codes séparés par des virgules)</label>
         <input id="versions-bloquees" placeholder="ex. 15, 16">
-        <label class="check"><input type="checkbox" id="maj-mobile"> Télécharger aussi en données mobiles (sinon : wifi seulement ; une mise à jour obligatoire se télécharge toujours)</label>
+        <label class="check"><input type="checkbox" id="maj-mobile"> Télécharger aussi en données mobiles (décoché : wifi seulement, sauf mise à jour obligatoire)</label>
         <div class="ligne"><button class="bouton principal" id="btn-enr-versions">Enregistrer</button></div>
       </div>
       <div class="carte">
@@ -367,7 +367,7 @@ function remplir() {
   apercu();
   $("version-min").value = e.version_min || 0;
   $("versions-bloquees").value = (e.versions_bloquees || []).join(", ");
-  $("maj-mobile").checked = !!e.maj_donnees_mobiles;
+  $("maj-mobile").checked = e.maj_donnees_mobiles !== false;
   $("maj-courante").innerHTML = e.lien_apk
     ? `Proposée : <b>${echapper(e.nom_version)}</b> (code ${e.derniere_version})<br>${echapper(e.notes || "")}`
     : "Aucune version proposée pour l'instant.";

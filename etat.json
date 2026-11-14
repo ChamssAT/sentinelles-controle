@@ -8,9 +8,15 @@
   "nom_version": "0.12.0",
   "lien_apk": "",
   "notes": "",
-  "annonce": {"active": false, "id": "", "titre": "", "texte": ""},
+  "annonce": {
+    "active": false,
+    "id": "",
+    "titre": "",
+    "texte": ""
+  },
   "appareils_bloques": [],
   "message_appareil": "Cet appareil n'est plus autorisé à lancer le jeu. Contactez le développeur.",
   "intervalle": 180,
-  "compteur": "sds710dea03c8"
+  "compteur": "sds710dea03c8",
+  "maj_donnees_mobiles": true
 }
