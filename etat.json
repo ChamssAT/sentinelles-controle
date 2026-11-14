@@ -1,0 +1,16 @@
+{
+  "actif": true,
+  "titre_maintenance": "MAINTENANCE EN COURS",
+  "message": "Le jeu est temporairement indisponible. Réessayez plus tard.",
+  "version_min": 0,
+  "versions_bloquees": [],
+  "derniere_version": 17,
+  "nom_version": "0.12.0",
+  "lien_apk": "",
+  "notes": "",
+  "annonce": {"active": false, "id": "", "titre": "", "texte": ""},
+  "appareils_bloques": [],
+  "message_appareil": "Cet appareil n'est plus autorisé à lancer le jeu. Contactez le développeur.",
+  "intervalle": 180,
+  "compteur": "sds710dea03c8"
+}

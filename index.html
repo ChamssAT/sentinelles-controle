@@ -1,0 +1,559 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Poste de commandement</title>
+<style>
+:root {
+  --fond: #0e0f0c; --panneau: #171913; --panneau2: #1f221a; --bord: #2d3125;
+  --texte: #e6dfcb; --doux: #a29b86; --or: #f5c04c; --or-fonce: #7a5d1d;
+  --vert: #6fbf5a; --rouge: #e5533d; --bleu: #6aa9d8;
+  --rayon: 10px;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fond); color: var(--texte);
+  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+header { position: sticky; top: 0; z-index: 5; background: #0b0c09ee; backdrop-filter: blur(6px);
+  border-bottom: 1px solid var(--bord); }
+.barre { max-width: 1100px; margin: 0 auto; padding: 12px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
+.marque { font-weight: 800; letter-spacing: .06em; color: var(--or); text-transform: uppercase; font-size: 15px; }
+.marque small { display: block; color: var(--doux); font-weight: 500; letter-spacing: .02em; text-transform: none; font-size: 12px; }
+.statut-jeu { margin-left: auto; display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px;
+  padding: 6px 12px; border-radius: 99px; border: 1px solid var(--bord); }
+.statut-jeu i { width: 10px; height: 10px; border-radius: 50%; background: var(--doux); display: inline-block; }
+.statut-jeu.ok i { background: var(--vert); box-shadow: 0 0 10px var(--vert); }
+.statut-jeu.ko i { background: var(--rouge); box-shadow: 0 0 10px var(--rouge); animation: pulse 1s infinite alternate; }
+@keyframes pulse { to { opacity: .35; } }
+nav { max-width: 1100px; margin: 0 auto; padding: 0 16px 8px; display: flex; gap: 6px; overflow-x: auto; }
+nav button { flex: none; background: none; border: 1px solid transparent; color: var(--doux); padding: 7px 12px;
+  border-radius: 99px; font: inherit; font-weight: 600; cursor: pointer; }
+nav button.actif { color: #1b1508; background: var(--or); }
+main { max-width: 1100px; margin: 0 auto; padding: 18px 16px 80px; }
+section.vue { display: none; } section.vue.actif { display: block; }
+h2 { font-size: 20px; margin: 4px 0 14px; } h3 { font-size: 15px; margin: 0 0 10px; color: var(--or); text-transform: uppercase; letter-spacing: .05em; }
+.grille { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+.carte { background: var(--panneau); border: 1px solid var(--bord); border-radius: var(--rayon); padding: 16px; min-width: 0; }
+.chiffres { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 14px; }
+.chiffre { background: var(--panneau); border: 1px solid var(--bord); border-radius: var(--rayon); padding: 14px 16px; }
+.chiffre b { display: block; font-size: 30px; font-variant-numeric: tabular-nums; line-height: 1.1; }
+.chiffre span { color: var(--doux); font-size: 13px; }
+label { display: block; font-size: 13px; color: var(--doux); margin: 10px 0 4px; }
+input, textarea, select { width: 100%; background: var(--panneau2); color: var(--texte); border: 1px solid var(--bord);
+  border-radius: 8px; padding: 9px 10px; font: inherit; }
+textarea { min-height: 80px; resize: vertical; }
+input:focus, textarea:focus { outline: 2px solid var(--or-fonce); border-color: var(--or); }
+.bouton { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--bord);
+  background: var(--panneau2); color: var(--texte); padding: 9px 14px; border-radius: 8px; font: inherit; font-weight: 650; cursor: pointer; }
+.bouton:hover { border-color: var(--or); }
+.bouton.principal { background: var(--or); color: #1b1508; border-color: var(--or); }
+.bouton.danger { background: var(--rouge); color: #fff; border-color: var(--rouge); }
+.bouton.vert { background: var(--vert); color: #0d1a09; border-color: var(--vert); }
+.bouton:disabled { opacity: .45; cursor: not-allowed; }
+.ligne { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
+.note { color: var(--doux); font-size: 13px; }
+.interrupteur-geant { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; margin-bottom: 6px; }
+.interrupteur-geant button { padding: 18px 10px; font-size: 17px; border-radius: 12px; }
+.apercu { position: relative; aspect-ratio: 16/8; border-radius: 12px; overflow: hidden; background: #070806;
+  border: 1px solid var(--bord); display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; padding: 12% 8%; }
+.apercu::before, .apercu::after { content: ""; position: absolute; left: 0; right: 0; height: 7%;
+  background: repeating-linear-gradient(-45deg, var(--c, var(--or)) 0 14px, #141209 14px 28px); animation: bandes 1.2s linear infinite; }
+.apercu::before { top: 0; } .apercu::after { bottom: 0; }
+@keyframes bandes { to { background-position: 40px 0; } }
+.apercu .tri { width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent;
+  border-bottom: 38px solid var(--c, var(--or)); margin-bottom: 8px; position: relative; animation: pulse .8s infinite alternate; }
+.apercu .t { color: var(--c, var(--or)); font-weight: 800; font-size: clamp(15px, 3.4vw, 24px); letter-spacing: .03em; }
+.apercu .m { color: var(--texte); font-size: clamp(11px, 2vw, 14px); margin-top: 6px; max-width: 46ch; }
+.apercu.libre { --c: var(--vert); }
+.apercu.libre::before, .apercu.libre::after { display: none; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--bord); vertical-align: top; }
+th { color: var(--doux); font-weight: 600; font-size: 12px; text-transform: uppercase; }
+.tableau { overflow-x: auto; }
+.pastille { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--bord); white-space: nowrap; }
+.pastille.or { color: var(--or); border-color: var(--or-fonce); } .pastille.rouge { color: var(--rouge); border-color: #6b2a20; }
+.pastille.vert { color: var(--vert); border-color: #2f5a26; }
+.histo { display: flex; align-items: flex-end; gap: 3px; height: 150px; padding-top: 10px; }
+.histo div { flex: 1; background: var(--or); border-radius: 3px 3px 0 0; min-height: 2px; position: relative; opacity: .9; }
+.histo div:hover { opacity: 1; outline: 1px solid #fff4; }
+.histo-axe { display: flex; justify-content: space-between; color: var(--doux); font-size: 11px; margin-top: 4px; }
+.barres-h div { display: grid; grid-template-columns: 70px 1fr 50px; gap: 8px; align-items: center; margin: 6px 0; font-size: 13px; }
+.barres-h .jauge { height: 12px; background: var(--panneau2); border-radius: 6px; overflow: hidden; }
+.barres-h .jauge i { display: block; height: 100%; background: var(--bleu); }
+#toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%) translateY(120px); background: var(--panneau2);
+  border: 1px solid var(--or); color: var(--texte); padding: 12px 18px; border-radius: 10px; transition: transform .25s; z-index: 20; max-width: calc(100% - 32px); }
+#toast.vu { transform: translateX(-50%) translateY(0); }
+#toast.erreur { border-color: var(--rouge); }
+.connexion { max-width: 520px; margin: 40px auto; }
+.cache { display: none !important; }
+code { background: var(--panneau2); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
+details summary { cursor: pointer; color: var(--doux); }
+.check { display: flex; gap: 8px; align-items: center; margin-top: 10px; } .check input { width: auto; }
+@media (max-width: 560px) { .interrupteur-geant { grid-template-columns: 1fr; } .chiffre b { font-size: 26px; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="barre">
+    <div class="marque">Sentinelles du Sahel<small>Poste de commandement à distance</small></div>
+    <div id="statut" class="statut-jeu"><i></i><span>…</span></div>
+  </div>
+  <nav id="onglets">
+    <button data-vue="tableau" class="actif">Tableau de bord</button>
+    <button data-vue="etat">Maintenance</button>
+    <button data-vue="maj">Mises à jour</button>
+    <button data-vue="annonce">Annonce</button>
+    <button data-vue="appareils">Appareils</button>
+    <button data-vue="historique">Historique</button>
+    <button data-vue="reglages">Réglages</button>
+  </nav>
+</header>
+
+<main>
+  <!-- ============ CONNEXION ============ -->
+  <div id="connexion" class="carte connexion cache">
+    <h3>Connexion</h3>
+    <p>Collez votre <b>jeton GitHub</b> pour pouvoir modifier l'état du jeu. Il reste dans ce navigateur uniquement.</p>
+    <label for="jeton">Jeton GitHub (github_pat_…)</label>
+    <input id="jeton" type="password" autocomplete="off" placeholder="github_pat_...">
+    <div class="ligne">
+      <button class="bouton principal" id="btn-connexion">Se connecter</button>
+      <button class="bouton" id="btn-lecture">Lecture seule</button>
+    </div>
+    <details style="margin-top:14px"><summary>Créer un jeton (une seule fois)</summary>
+      <ol class="note">
+        <li>Ouvrir <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="color:var(--or)">github.com → Fine-grained token</a>.</li>
+        <li>Nom : « Poste de commandement », expiration au choix (1 an).</li>
+        <li>Repository access : <b>Only select repositories</b> → <code>sentinelles-controle</code>.</li>
+        <li>Permissions → Repository → <b>Contents : Read and write</b>.</li>
+        <li>Générer, copier le jeton et le coller ici.</li>
+      </ol>
+    </details>
+  </div>
+
+  <!-- ============ TABLEAU DE BORD ============ -->
+  <section class="vue actif" id="vue-tableau">
+    <h2>Tableau de bord</h2>
+    <div class="chiffres">
+      <div class="chiffre"><b id="n-install">–</b><span>appareils ayant installé le jeu</span></div>
+      <div class="chiffre"><b id="n-jour">–</b><span>appareils actifs aujourd'hui</span></div>
+      <div class="chiffre"><b id="n-7j">–</b><span>appareils actifs (cumul 7 jours)</span></div>
+      <div class="chiffre"><b id="n-lancements">–</b><span>lancements en ligne</span></div>
+      <div class="chiffre"><b id="n-telech">–</b><span>téléchargements d'APK</span></div>
+    </div>
+    <div class="grille">
+      <div class="carte" style="grid-column: 1 / -1">
+        <h3>Appareils actifs par jour (30 jours)</h3>
+        <div class="histo" id="histo"></div>
+        <div class="histo-axe"><span id="histo-debut"></span><span>aujourd'hui</span></div>
+      </div>
+      <div class="carte">
+        <h3>Appareils par version installée</h3>
+        <div class="barres-h" id="par-version"><span class="note">Chargement…</span></div>
+      </div>
+      <div class="carte">
+        <h3>État actuel</h3>
+        <div id="resume-etat" class="note">Chargement…</div>
+        <div class="ligne"><button class="bouton" id="btn-rafraichir">Actualiser</button></div>
+      </div>
+    </div>
+    <p class="note">Les chiffres ne comptent que les appareils passés en ligne au moins une fois (le jeu n'exige jamais internet).
+      Un appareil n'est compté qu'une fois à l'installation, une fois par version et une fois par jour. Données anonymes.</p>
+  </section>
+
+  <!-- ============ MAINTENANCE ============ -->
+  <section class="vue" id="vue-etat">
+    <h2>Maintenance / arrêt du jeu</h2>
+    <div class="grille">
+      <div class="carte">
+        <div class="interrupteur-geant">
+          <button class="bouton vert" id="btn-ouvrir">▶ JEU OUVERT</button>
+          <button class="bouton danger" id="btn-fermer">■ MAINTENANCE</button>
+        </div>
+        <label for="titre-maint">Titre affiché</label>
+        <input id="titre-maint" maxlength="40">
+        <label for="message-maint">Message aux joueurs</label>
+        <textarea id="message-maint" maxlength="300"></textarea>
+        <div class="ligne">
+          <button class="bouton" data-modele="Nos équipes améliorent le jeu. Revenez dans quelques heures, merci de votre patience.">Modèle : amélioration</button>
+          <button class="bouton" data-modele="Une mise à jour importante est en préparation. Le jeu revient très bientôt !">Modèle : mise à jour</button>
+          <button class="bouton" data-modele="Le jeu est suspendu jusqu'à nouvel ordre.">Modèle : suspension</button>
+        </div>
+        <div class="ligne"><button class="bouton principal" id="btn-enr-maint">Enregistrer le message</button></div>
+        <p class="note">Effet : jeu ouvert → écran plein immédiat en partie (sous 1 à 3 min). Jeu fermé → notification Android
+          dès que le téléphone a internet (quelques minutes, selon Android), et écran de maintenance au lancement,
+          même si le joueur a recoupé internet.</p>
+      </div>
+      <div class="carte">
+        <h3>Aperçu sur le téléphone</h3>
+        <div class="apercu" id="apercu"><div class="tri"></div><div class="t" id="ap-titre"></div><div class="m" id="ap-msg"></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ MISES À JOUR ============ -->
+  <section class="vue" id="vue-maj">
+    <h2>Mises à jour</h2>
+    <div class="grille">
+      <div class="carte">
+        <h3>Version proposée aux joueurs</h3>
+        <div id="maj-courante" class="note"></div>
+        <label for="version-min">Version minimale (code) — en dessous, mise à jour OBLIGATOIRE</label>
+        <input id="version-min" type="number" min="0">
+        <label for="versions-bloquees">Versions bloquées (codes séparés par des virgules)</label>
+        <input id="versions-bloquees" placeholder="ex. 15, 16">
+        <div class="ligne"><button class="bouton principal" id="btn-enr-versions">Enregistrer</button></div>
+      </div>
+      <div class="carte">
+        <h3>Publier une version</h3>
+        <p class="note">Sur le PC : <code>outils/controle/publier.sh 0.13.0 "Nouveautés…"</code><br>
+          Le script compile l'APK signé, le met en ligne ici et le propose aux joueurs. GitHub n'accepte pas l'envoi d'APK
+          depuis une page web.</p>
+      </div>
+    </div>
+    <div class="carte" style="margin-top:14px">
+      <h3>Versions publiées</h3>
+      <div class="tableau"><table>
+        <thead><tr><th>Version</th><th>Code</th><th>Date</th><th>Téléch.</th><th>Statut</th><th></th></tr></thead>
+        <tbody id="liste-versions"><tr><td colspan="6" class="note">Chargement…</td></tr></tbody>
+      </table></div>
+    </div>
+  </section>
+
+  <!-- ============ ANNONCE ============ -->
+  <section class="vue" id="vue-annonce">
+    <h2>Annonce aux joueurs</h2>
+    <div class="carte" style="max-width:640px">
+      <p class="note">Message affiché une seule fois au menu du jeu (et en notification si le jeu est fermé). Ne bloque pas le jeu.</p>
+      <label for="annonce-titre">Titre</label>
+      <input id="annonce-titre" maxlength="40" placeholder="ex. Nouvelle opération">
+      <label for="annonce-texte">Texte</label>
+      <textarea id="annonce-texte" maxlength="300" placeholder="ex. L'opération 5 arrive la semaine prochaine !"></textarea>
+      <div class="ligne">
+        <button class="bouton principal" id="btn-annonce">Publier l'annonce</button>
+        <button class="bouton" id="btn-annonce-off">Retirer l'annonce</button>
+      </div>
+      <p class="note" id="annonce-etat"></p>
+    </div>
+  </section>
+
+  <!-- ============ APPAREILS ============ -->
+  <section class="vue" id="vue-appareils">
+    <h2>Appareils bloqués</h2>
+    <div class="grille">
+      <div class="carte">
+        <h3>Bloquer un appareil</h3>
+        <p class="note">L'identifiant (8 caractères) est affiché dans le jeu : menu → COMMANDES, en bas (« Appareil XXXXXXXX »).</p>
+        <label for="app-id">Identifiant</label>
+        <input id="app-id" maxlength="8" placeholder="ex. 23D4A15F" style="text-transform:uppercase">
+        <label for="app-note">Note (pour vous)</label>
+        <input id="app-note" placeholder="ex. copie piratée, revendeur…">
+        <div class="ligne"><button class="bouton danger" id="btn-bloquer">Bloquer</button></div>
+        <label for="msg-appareil">Message affiché sur l'appareil bloqué</label>
+        <textarea id="msg-appareil" maxlength="300"></textarea>
+        <div class="ligne"><button class="bouton" id="btn-enr-msg-app">Enregistrer le message</button></div>
+      </div>
+      <div class="carte">
+        <h3>Liste</h3>
+        <div class="tableau"><table><thead><tr><th>Appareil</th><th>Note</th><th></th></tr></thead>
+          <tbody id="liste-appareils"></tbody></table></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HISTORIQUE ============ -->
+  <section class="vue" id="vue-historique">
+    <h2>Historique des changements</h2>
+    <div class="carte"><div class="tableau"><table>
+      <thead><tr><th>Date</th><th>Changement</th><th></th></tr></thead>
+      <tbody id="liste-historique"><tr><td colspan="3" class="note">Chargement…</td></tr></tbody>
+    </table></div></div>
+  </section>
+
+  <!-- ============ RÉGLAGES ============ -->
+  <section class="vue" id="vue-reglages">
+    <h2>Réglages</h2>
+    <div class="grille">
+      <div class="carte">
+        <h3>Vérification par le jeu</h3>
+        <label for="intervalle">Intervalle de vérification en partie (secondes, 30 à 3600)</label>
+        <input id="intervalle" type="number" min="30" max="3600">
+        <div class="ligne"><button class="bouton principal" id="btn-enr-reglages">Enregistrer</button></div>
+      </div>
+      <div class="carte">
+        <h3>Session</h3>
+        <p class="note" id="session"></p>
+        <div class="ligne"><button class="bouton" id="btn-deconnexion">Oublier le jeton</button></div>
+      </div>
+      <div class="carte" style="grid-column: 1 / -1">
+        <h3>Fichier d'état complet (avancé)</h3>
+        <textarea id="json-brut" style="min-height:260px;font-family:ui-monospace,monospace;font-size:13px"></textarea>
+        <div class="ligne"><button class="bouton" id="btn-enr-brut">Enregistrer le JSON</button></div>
+      </div>
+    </div>
+  </section>
+</main>
+<div id="toast"></div>
+
+<script>
+"use strict";
+const DEPOT = "ChamssAT/sentinelles-controle";
+const FICHIER = "etat.json";
+const COMPTEUR_DEFAUT = "sds710dea03c8";
+const API = "https://api.github.com/repos/" + DEPOT;
+const ABACUS = "https://abacus.jasoncameron.dev/get/";
+
+let jeton = "";
+try { jeton = localStorage.getItem("pc_jeton") || ""; } catch (e) {}
+let lectureSeule = false;
+let etat = null, sha = null, versions = [];
+
+const $ = (id) => document.getElementById(id);
+const echapper = (t) => String(t ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+
+function toast(msg, erreur) {
+  const t = $("toast"); t.textContent = msg; t.className = "vu" + (erreur ? " erreur" : "");
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.className = "", 4200);
+}
+
+async function gh(chemin, options = {}) {
+  const entetes = { "Accept": "application/vnd.github+json", ...(options.headers || {}) };
+  if (jeton) entetes["Authorization"] = "Bearer " + jeton;
+  const r = await fetch(chemin.startsWith("http") ? chemin : API + chemin, { ...options, headers: entetes, cache: "no-store" });
+  if (!r.ok) {
+    let detail = ""; try { detail = (await r.json()).message; } catch (e) {}
+    throw new Error(r.status + " " + detail);
+  }
+  return r.status === 204 ? null : r.json();
+}
+
+const b64Decode = (b64) => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\n/g, "")), (c) => c.charCodeAt(0)));
+const b64Encode = (txt) => { const o = new TextEncoder().encode(txt); let s = ""; o.forEach((b) => s += String.fromCharCode(b)); return btoa(s); };
+
+async function chargerEtat() {
+  const d = await gh("/contents/" + FICHIER + "?ref=main");
+  sha = d.sha; etat = JSON.parse(b64Decode(d.content));
+  remplir();
+}
+
+async function enregistrer(modif, message) {
+  if (lectureSeule || !jeton) { toast("Connectez-vous avec un jeton pour modifier.", true); return false; }
+  try {
+    await chargerEtat();                       // repartir de la dernière version (évite d'écraser)
+    const nouveau = structuredClone(etat); modif(nouveau);
+    const corps = { message, sha, branch: "main", content: b64Encode(JSON.stringify(nouveau, null, 2) + "\n") };
+    const r = await gh("/contents/" + FICHIER, { method: "PUT", body: JSON.stringify(corps) });
+    sha = r.content.sha; etat = nouveau; remplir();
+    toast("✔ Enregistré. Les joueurs connectés le reçoivent sous 1 à 3 minutes.");
+    chargerHistorique();
+    return true;
+  } catch (e) { toast("Échec : " + e.message, true); return false; }
+}
+
+// -------------------------------------------------------------- affichage
+function remplir() {
+  const e = etat;
+  const s = $("statut");
+  s.className = "statut-jeu " + (e.actif === false ? "ko" : "ok");
+  s.querySelector("span").textContent = e.actif === false ? "MAINTENANCE" : "JEU OUVERT";
+  $("titre-maint").value = e.titre_maintenance || "MAINTENANCE EN COURS";
+  $("message-maint").value = e.message || "";
+  apercu();
+  $("version-min").value = e.version_min || 0;
+  $("versions-bloquees").value = (e.versions_bloquees || []).join(", ");
+  $("maj-courante").innerHTML = e.lien_apk
+    ? `Proposée : <b>${echapper(e.nom_version)}</b> (code ${e.derniere_version})<br>${echapper(e.notes || "")}`
+    : "Aucune version proposée pour l'instant.";
+  const a = e.annonce || {};
+  $("annonce-titre").value = a.titre || ""; $("annonce-texte").value = a.texte || "";
+  $("annonce-etat").textContent = a.active ? "Annonce en ligne (id " + a.id + ")." : "Aucune annonce en ligne.";
+  $("msg-appareil").value = e.message_appareil || "";
+  $("intervalle").value = e.intervalle || 180;
+  $("json-brut").value = JSON.stringify(e, null, 2);
+  const bl = e.appareils_bloques || [];
+  $("liste-appareils").innerHTML = bl.length ? bl.map((x, i) => {
+    const id = typeof x === "string" ? x : x.id, note = typeof x === "string" ? "" : (x.note || "");
+    return `<tr><td><code>${echapper(id)}</code></td><td>${echapper(note)}</td><td><button class="bouton" data-debloquer="${i}">Débloquer</button></td></tr>`;
+  }).join("") : `<tr><td colspan="3" class="note">Aucun appareil bloqué.</td></tr>`;
+  $("resume-etat").innerHTML = [
+    e.actif === false ? `<span class="pastille rouge">MAINTENANCE</span> ${echapper(e.message)}` : `<span class="pastille vert">JEU OUVERT</span>`,
+    e.lien_apk ? `Version proposée : <b>${echapper(e.nom_version)}</b> (code ${e.derniere_version})` : "Pas de mise à jour proposée",
+    `Version minimale : ${e.version_min || 0}`,
+    `Appareils bloqués : ${bl.length}`,
+    (e.annonce && e.annonce.active) ? `Annonce : « ${echapper(e.annonce.titre || e.annonce.texte)} »` : "Pas d'annonce",
+  ].join("<br>");
+  listerVersions();
+}
+
+function apercu() {
+  const ferme = etat && etat.actif === false;
+  const a = $("apercu"); a.className = "apercu" + (ferme ? "" : " libre");
+  $("ap-titre").textContent = ferme ? ($("titre-maint").value || "MAINTENANCE EN COURS") : "JEU OUVERT";
+  $("ap-msg").textContent = ferme ? $("message-maint").value : "Les joueurs jouent normalement.";
+}
+
+function listerVersions() {
+  if (!etat) return;
+  $("liste-versions").innerHTML = versions.length ? versions.map((v) => {
+    const statut = [];
+    if (v.code === etat.derniere_version && etat.lien_apk) statut.push('<span class="pastille or">proposée</span>');
+    if (v.code < (etat.version_min || 0) || (etat.versions_bloquees || []).includes(v.code)) statut.push('<span class="pastille rouge">bloquée</span>');
+    if (v.code === etat.version_min) statut.push('<span class="pastille vert">minimum</span>');
+    return `<tr><td><b>${echapper(v.nom)}</b><div class="note">${echapper(v.notes).slice(0, 140)}</div></td><td>${v.code}</td>
+      <td>${new Date(v.date).toLocaleDateString("fr-FR")}</td><td>${v.telech}</td><td>${statut.join(" ")}</td>
+      <td style="white-space:nowrap"><button class="bouton" data-proposer="${v.code}">Proposer</button>
+      <button class="bouton" data-obliger="${v.code}">Obligatoire</button></td></tr>`;
+  }).join("") : `<tr><td colspan="6" class="note">Aucune version publiée. Utilisez publier.sh sur le PC.</td></tr>`;
+}
+
+async function chargerVersions() {
+  try {
+    const r = await gh("/releases?per_page=50");
+    versions = r.map((x) => {
+      const apk = (x.assets || []).find((a) => a.name.endsWith(".apk"));
+      return { code: parseInt(String(x.tag_name).replace(/\D/g, ""), 10) || 0, nom: x.name || x.tag_name, notes: x.body || "",
+        date: x.published_at || x.created_at, lien: apk ? apk.browser_download_url : "", telech: apk ? apk.download_count : 0 };
+    }).filter((v) => v.lien).sort((a, b) => b.code - a.code);
+    $("n-telech").textContent = versions.reduce((s, v) => s + v.telech, 0).toLocaleString("fr-FR");
+    listerVersions();
+  } catch (e) { $("n-telech").textContent = "?"; }
+}
+
+// -------------------------------------------------------------- statistiques (compteurs anonymes)
+async function compteur(cle) {
+  const ns = (etat && etat.compteur) || COMPTEUR_DEFAUT;
+  try {
+    const r = await fetch(ABACUS + ns + "/" + cle, { cache: "no-store" });
+    if (r.status === 404) return 0;
+    return (await r.json()).value || 0;
+  } catch (e) { return null; }
+}
+const fmt = (n) => n === null ? "?" : n.toLocaleString("fr-FR");
+const cleJour = (d) => "j-" + d.toISOString().slice(0, 10).replace(/-/g, "");
+
+async function chargerStats() {
+  const [inst, lanc] = await Promise.all([compteur("installations"), compteur("lancements")]);
+  $("n-install").textContent = fmt(inst); $("n-lancements").textContent = fmt(lanc);
+  const jours = [];
+  for (let i = 29; i >= 0; i--) { const d = new Date(); d.setUTCDate(d.getUTCDate() - i); jours.push(d); }
+  const valeurs = await Promise.all(jours.map((d) => compteur(cleJour(d))));
+  $("n-jour").textContent = fmt(valeurs[29]);
+  $("n-7j").textContent = fmt(valeurs.slice(-7).reduce((s, v) => s + (v || 0), 0));
+  const max = Math.max(1, ...valeurs.map((v) => v || 0));
+  $("histo").innerHTML = valeurs.map((v, i) =>
+    `<div style="height:${Math.max(1.5, 100 * (v || 0) / max)}%" title="${jours[i].toLocaleDateString("fr-FR")} : ${v ?? "?"} appareil(s)"></div>`).join("");
+  $("histo-debut").textContent = jours[0].toLocaleDateString("fr-FR");
+  // par version : codes connus (versions publiées + version actuelle et les précédentes)
+  const codes = new Set(versions.map((v) => v.code));
+  const haut = Math.max(etat ? etat.derniere_version || 0 : 0, ...codes, 17);
+  for (let c = Math.max(1, haut - 8); c <= haut; c++) codes.add(c);
+  const liste = [...codes].sort((a, b) => b - a);
+  const nb = await Promise.all(liste.map((c) => compteur("v-" + c)));
+  const lignes = liste.map((c, i) => [c, nb[i] || 0]).filter((x) => x[1] > 0);
+  const m = Math.max(1, ...lignes.map((x) => x[1]));
+  const nom = (c) => (versions.find((v) => v.code === c) || {}).nom || ("code " + c);
+  $("par-version").innerHTML = lignes.length ? lignes.map(([c, n]) =>
+    `<div><span>${echapper(nom(c))}</span><span class="jauge"><i style="width:${100 * n / m}%"></i></span><b>${n}</b></div>`).join("")
+    : `<span class="note">Aucun appareil compté pour l'instant.</span>`;
+}
+
+// -------------------------------------------------------------- historique
+async function chargerHistorique() {
+  try {
+    const c = await gh("/commits?path=" + FICHIER + "&per_page=30");
+    $("liste-historique").innerHTML = c.map((x) => `<tr><td style="white-space:nowrap">${new Date(x.commit.author.date).toLocaleString("fr-FR")}</td>
+      <td>${echapper(x.commit.message)}</td><td><button class="bouton" data-restaurer="${x.sha}">Restaurer</button></td></tr>`).join("");
+  } catch (e) { $("liste-historique").innerHTML = `<tr><td colspan="3" class="note">Indisponible : ${echapper(e.message)}</td></tr>`; }
+}
+
+// -------------------------------------------------------------- actions
+function brancher() {
+  $("onglets").addEventListener("click", (ev) => {
+    const b = ev.target.closest("button[data-vue]"); if (!b) return;
+    document.querySelectorAll("#onglets button").forEach((x) => x.classList.toggle("actif", x === b));
+    document.querySelectorAll("section.vue").forEach((s) => s.classList.toggle("actif", s.id === "vue-" + b.dataset.vue));
+    try { localStorage.setItem("pc_vue", b.dataset.vue); } catch (e) {}
+  });
+  $("btn-connexion").onclick = async () => {
+    jeton = $("jeton").value.trim(); lectureSeule = false;
+    try {
+      const d = await gh("");
+      if (!d.permissions || !d.permissions.push) throw new Error("ce jeton ne peut pas écrire dans " + DEPOT);
+      try { localStorage.setItem("pc_jeton", jeton); } catch (e) {}
+      demarrer();
+    } catch (e) { toast("Jeton refusé : " + e.message, true); }
+  };
+  $("btn-lecture").onclick = () => { jeton = ""; lectureSeule = true; demarrer(); };
+  $("btn-deconnexion").onclick = () => { try { localStorage.removeItem("pc_jeton"); } catch (e) {} location.reload(); };
+  $("titre-maint").oninput = apercu; $("message-maint").oninput = apercu;
+  document.querySelectorAll("[data-modele]").forEach((b) => b.onclick = () => { $("message-maint").value = b.dataset.modele; apercu(); });
+  const texteMaint = (e) => { e.titre_maintenance = $("titre-maint").value.trim() || "MAINTENANCE EN COURS"; e.message = $("message-maint").value.trim(); };
+  $("btn-fermer").onclick = () => {
+    if (!confirm("Mettre le jeu en MAINTENANCE pour tous les joueurs ?")) return;
+    enregistrer((e) => { texteMaint(e); e.actif = false; }, "Maintenance : " + $("message-maint").value.trim().slice(0, 60));
+  };
+  $("btn-ouvrir").onclick = () => enregistrer((e) => { e.actif = true; }, "Jeu ouvert");
+  $("btn-enr-maint").onclick = () => enregistrer(texteMaint, "Message de maintenance modifié");
+  $("btn-enr-versions").onclick = () => enregistrer((e) => {
+    e.version_min = parseInt($("version-min").value, 10) || 0;
+    e.versions_bloquees = $("versions-bloquees").value.split(/[,; ]+/).map((x) => parseInt(x, 10)).filter((x) => x > 0);
+  }, "Versions : minimum " + $("version-min").value);
+  document.addEventListener("click", (ev) => {
+    const t = ev.target;
+    if (t.dataset.proposer) {
+      const v = versions.find((x) => x.code == t.dataset.proposer);
+      enregistrer((e) => { e.derniere_version = v.code; e.nom_version = v.nom; e.lien_apk = v.lien; e.notes = v.notes; }, "Version proposée : " + v.nom);
+    } else if (t.dataset.obliger) {
+      const v = versions.find((x) => x.code == t.dataset.obliger);
+      if (!confirm("Rendre la version " + v.nom + " OBLIGATOIRE ? Les versions plus anciennes seront bloquées jusqu'à la mise à jour.")) return;
+      enregistrer((e) => { e.derniere_version = v.code; e.nom_version = v.nom; e.lien_apk = v.lien; e.notes = v.notes; e.version_min = v.code; }, "Mise à jour obligatoire : " + v.nom);
+    } else if (t.dataset.debloquer !== undefined) {
+      const i = +t.dataset.debloquer;
+      enregistrer((e) => { e.appareils_bloques.splice(i, 1); }, "Appareil débloqué");
+    } else if (t.dataset.restaurer) {
+      if (!confirm("Revenir à cet état ?")) return;
+      gh("/contents/" + FICHIER + "?ref=" + t.dataset.restaurer).then((d) => {
+        const ancien = JSON.parse(b64Decode(d.content));
+        enregistrer((e) => { Object.keys(e).forEach((k) => delete e[k]); Object.assign(e, ancien); }, "Restauration de l'état du " + t.closest("tr").cells[0].textContent);
+      }).catch((er) => toast("Échec : " + er.message, true));
+    }
+  });
+  $("btn-annonce").onclick = () => {
+    const texte = $("annonce-texte").value.trim(); if (!texte) { toast("Écrivez un texte.", true); return; }
+    enregistrer((e) => { e.annonce = { active: true, id: "a" + Date.now().toString(36), titre: $("annonce-titre").value.trim() || "Annonce", texte }; }, "Annonce : " + texte.slice(0, 60));
+  };
+  $("btn-annonce-off").onclick = () => enregistrer((e) => { e.annonce = { ...(e.annonce || {}), active: false }; }, "Annonce retirée");
+  $("btn-bloquer").onclick = () => {
+    const id = $("app-id").value.trim().toUpperCase();
+    if (!/^[0-9A-F]{8}$/.test(id)) { toast("L'identifiant fait 8 caractères (chiffres et lettres A à F).", true); return; }
+    enregistrer((e) => { e.appareils_bloques = (e.appareils_bloques || []).filter((x) => (x.id || x) !== id); e.appareils_bloques.push({ id, note: $("app-note").value.trim() }); }, "Appareil bloqué : " + id)
+      .then((ok) => { if (ok) { $("app-id").value = ""; $("app-note").value = ""; } });
+  };
+  $("btn-enr-msg-app").onclick = () => enregistrer((e) => { e.message_appareil = $("msg-appareil").value.trim(); }, "Message appareil bloqué modifié");
+  $("btn-enr-reglages").onclick = () => enregistrer((e) => { e.intervalle = Math.min(3600, Math.max(30, parseInt($("intervalle").value, 10) || 180)); }, "Intervalle : " + $("intervalle").value + " s");
+  $("btn-enr-brut").onclick = () => {
+    let d; try { d = JSON.parse($("json-brut").value); } catch (er) { toast("JSON invalide : " + er.message, true); return; }
+    enregistrer((e) => { Object.keys(e).forEach((k) => delete e[k]); Object.assign(e, d); }, "Modification manuelle du fichier d'état");
+  };
+  $("btn-rafraichir").onclick = () => demarrer();
+}
+
+async function demarrer() {
+  $("connexion").classList.add("cache");
+  $("session").textContent = lectureSeule ? "Lecture seule (aucune modification possible)." : "Connecté avec un jeton (modifications autorisées).";
+  document.querySelectorAll("main button.principal, main button.danger, main button.vert").forEach((b) => b.disabled = lectureSeule);
+  try { await chargerEtat(); } catch (e) { toast("Lecture de l'état impossible : " + e.message, true); return; }
+  await chargerVersions();
+  chargerStats();
+  chargerHistorique();
+}
+
+brancher();
+try { const v = localStorage.getItem("pc_vue"); if (v) document.querySelector(`#onglets button[data-vue="${v}"]`)?.click(); } catch (e) {}
+if (jeton) demarrer(); else $("connexion").classList.remove("cache");
+</script>
+</body>
+</html>
