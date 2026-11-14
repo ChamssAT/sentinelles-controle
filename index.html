@@ -2,304 +2,632 @@
 <html lang="fr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex">
+<meta name="theme-color" content="#F6F0E4" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#14120E" media="(prefers-color-scheme: dark)">
 <title>Poste de commandement</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='15' fill='%23C2802B'/%3E%3Cpath d='M16 6l2.6 6.4 6.9.5-5.3 4.4 1.7 6.7L16 20.3 10.1 24l1.7-6.7-5.3-4.4 6.9-.5z' fill='%23FBF6EC'/%3E%3C/svg%3E">
 <style>
+/* ============================================================ thème
+   Inspiré du Sahel : sable, ocre, latérite, acacia, ciel de nuit. */
 :root {
-  --fond: #0e0f0c; --panneau: #171913; --panneau2: #1f221a; --bord: #2d3125;
-  --texte: #e6dfcb; --doux: #a29b86; --or: #f5c04c; --or-fonce: #7a5d1d;
-  --vert: #6fbf5a; --rouge: #e5533d; --bleu: #6aa9d8;
-  --rayon: 10px;
+  --fond: #F6F0E4; --fond-2: #EFE6D4;
+  --surface: #FFFCF6; --surface-2: #F8F2E6; --ligne: #E6DCC8; --ligne-forte: #D5C7AC;
+  --encre: #2A241C; --encre-2: #5B5144; --doux: #8A7E6C;
+  --ocre: #C2802B; --ocre-fonce: #9A621B; --ocre-pale: #F4E3C3;
+  --laterite: #B4502F; --laterite-pale: #F6DED3;
+  --acacia: #4F7A45; --acacia-pale: #DDEBD5;
+  --nuit: #2C3A55; --nuit-pale: #DCE3F0;
+  --ombre: 0 1px 2px rgba(58, 42, 18, .06), 0 8px 24px -12px rgba(58, 42, 18, .18);
+  --ombre-haute: 0 2px 6px rgba(58, 42, 18, .08), 0 24px 48px -20px rgba(58, 42, 18, .32);
+  --rayon: 18px; --rayon-s: 12px;
+  --serif: "Instrument Serif", "Iowan Old Style", Georgia, serif;
+  --sans: Inter, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --fond: #14120E; --fond-2: #1A1712;
+    --surface: #1E1B15; --surface-2: #25211A; --ligne: #332D24; --ligne-forte: #463E31;
+    --encre: #F1E9DA; --encre-2: #CDBFA8; --doux: #9C8F7A;
+    --ocre: #E2A44C; --ocre-fonce: #F0BD6E; --ocre-pale: #3A2C17;
+    --laterite: #E2795A; --laterite-pale: #3D2119;
+    --acacia: #8DBB7C; --acacia-pale: #1F2D1B;
+    --nuit: #9FB2D6; --nuit-pale: #1E2636;
+    --ombre: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.6);
+    --ombre-haute: 0 2px 6px rgba(0,0,0,.35), 0 28px 56px -22px rgba(0,0,0,.75);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --fond: #14120E; --fond-2: #1A1712;
+  --surface: #1E1B15; --surface-2: #25211A; --ligne: #332D24; --ligne-forte: #463E31;
+  --encre: #F1E9DA; --encre-2: #CDBFA8; --doux: #9C8F7A;
+  --ocre: #E2A44C; --ocre-fonce: #F0BD6E; --ocre-pale: #3A2C17;
+  --laterite: #E2795A; --laterite-pale: #3D2119;
+  --acacia: #8DBB7C; --acacia-pale: #1F2D1B;
+  --nuit: #9FB2D6; --nuit-pale: #1E2636;
+  --ombre: 0 1px 2px rgba(0,0,0,.3), 0 10px 30px -14px rgba(0,0,0,.6);
+  --ombre-haute: 0 2px 6px rgba(0,0,0,.35), 0 28px 56px -22px rgba(0,0,0,.75);
   color-scheme: dark;
 }
+
 * { box-sizing: border-box; }
-body { margin: 0; background: var(--fond); color: var(--texte);
-  font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
-header { position: sticky; top: 0; z-index: 5; background: #0b0c09ee; backdrop-filter: blur(6px);
-  border-bottom: 1px solid var(--bord); }
-.barre { max-width: 1100px; margin: 0 auto; padding: 12px 16px; display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
-.marque { font-weight: 800; letter-spacing: .06em; color: var(--or); text-transform: uppercase; font-size: 15px; }
-.marque small { display: block; color: var(--doux); font-weight: 500; letter-spacing: .02em; text-transform: none; font-size: 12px; }
-.statut-jeu { margin-left: auto; display: flex; align-items: center; gap: 8px; font-weight: 700; font-size: 13px;
-  padding: 6px 12px; border-radius: 99px; border: 1px solid var(--bord); }
-.statut-jeu i { width: 10px; height: 10px; border-radius: 50%; background: var(--doux); display: inline-block; }
-.statut-jeu.ok i { background: var(--vert); box-shadow: 0 0 10px var(--vert); }
-.statut-jeu.ko i { background: var(--rouge); box-shadow: 0 0 10px var(--rouge); animation: pulse 1s infinite alternate; }
-@keyframes pulse { to { opacity: .35; } }
-nav { max-width: 1100px; margin: 0 auto; padding: 0 16px 8px; display: flex; gap: 6px; overflow-x: auto; }
-nav button { flex: none; background: none; border: 1px solid transparent; color: var(--doux); padding: 7px 12px;
-  border-radius: 99px; font: inherit; font-weight: 600; cursor: pointer; }
-nav button.actif { color: #1b1508; background: var(--or); }
-main { max-width: 1100px; margin: 0 auto; padding: 18px 16px 80px; }
-section.vue { display: none; } section.vue.actif { display: block; }
-h2 { font-size: 20px; margin: 4px 0 14px; } h3 { font-size: 15px; margin: 0 0 10px; color: var(--or); text-transform: uppercase; letter-spacing: .05em; }
-.grille { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
-.carte { background: var(--panneau); border: 1px solid var(--bord); border-radius: var(--rayon); padding: 16px; min-width: 0; }
-.chiffres { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); margin-bottom: 14px; }
-.chiffre { background: var(--panneau); border: 1px solid var(--bord); border-radius: var(--rayon); padding: 14px 16px; }
-.chiffre b { display: block; font-size: 30px; font-variant-numeric: tabular-nums; line-height: 1.1; }
-.chiffre span { color: var(--doux); font-size: 13px; }
-label { display: block; font-size: 13px; color: var(--doux); margin: 10px 0 4px; }
-input, textarea, select { width: 100%; background: var(--panneau2); color: var(--texte); border: 1px solid var(--bord);
-  border-radius: 8px; padding: 9px 10px; font: inherit; }
-textarea { min-height: 80px; resize: vertical; }
-input:focus, textarea:focus { outline: 2px solid var(--or-fonce); border-color: var(--or); }
-.bouton { display: inline-flex; align-items: center; justify-content: center; gap: 6px; border: 1px solid var(--bord);
-  background: var(--panneau2); color: var(--texte); padding: 9px 14px; border-radius: 8px; font: inherit; font-weight: 650; cursor: pointer; }
-.bouton:hover { border-color: var(--or); }
-.bouton.principal { background: var(--or); color: #1b1508; border-color: var(--or); }
-.bouton.danger { background: var(--rouge); color: #fff; border-color: var(--rouge); }
-.bouton.vert { background: var(--vert); color: #0d1a09; border-color: var(--vert); }
-.bouton:disabled { opacity: .45; cursor: not-allowed; }
-.ligne { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 12px; }
-.note { color: var(--doux); font-size: 13px; }
-.interrupteur-geant { display: grid; gap: 12px; grid-template-columns: 1fr 1fr; margin-bottom: 6px; }
-.interrupteur-geant button { padding: 18px 10px; font-size: 17px; border-radius: 12px; }
-.apercu { position: relative; aspect-ratio: 16/8; border-radius: 12px; overflow: hidden; background: #070806;
-  border: 1px solid var(--bord); display: flex; flex-direction: column; align-items: center; justify-content: center;
-  text-align: center; padding: 12% 8%; }
-.apercu::before, .apercu::after { content: ""; position: absolute; left: 0; right: 0; height: 7%;
-  background: repeating-linear-gradient(-45deg, var(--c, var(--or)) 0 14px, #141209 14px 28px); animation: bandes 1.2s linear infinite; }
-.apercu::before { top: 0; } .apercu::after { bottom: 0; }
-@keyframes bandes { to { background-position: 40px 0; } }
-.apercu .tri { width: 0; height: 0; border-left: 22px solid transparent; border-right: 22px solid transparent;
-  border-bottom: 38px solid var(--c, var(--or)); margin-bottom: 8px; position: relative; animation: pulse .8s infinite alternate; }
-.apercu .t { color: var(--c, var(--or)); font-weight: 800; font-size: clamp(15px, 3.4vw, 24px); letter-spacing: .03em; }
-.apercu .m { color: var(--texte); font-size: clamp(11px, 2vw, 14px); margin-top: 6px; max-width: 46ch; }
-.apercu.libre { --c: var(--vert); }
-.apercu.libre::before, .apercu.libre::after { display: none; }
-table { width: 100%; border-collapse: collapse; font-size: 14px; }
-th, td { text-align: left; padding: 8px 6px; border-bottom: 1px solid var(--bord); vertical-align: top; }
-th { color: var(--doux); font-weight: 600; font-size: 12px; text-transform: uppercase; }
-.tableau { overflow-x: auto; }
-.pastille { display: inline-block; font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 99px; border: 1px solid var(--bord); white-space: nowrap; }
-.pastille.or { color: var(--or); border-color: var(--or-fonce); } .pastille.rouge { color: var(--rouge); border-color: #6b2a20; }
-.pastille.vert { color: var(--vert); border-color: #2f5a26; }
-.histo { display: flex; align-items: flex-end; gap: 3px; height: 150px; padding-top: 10px; }
-.histo div { flex: 1; background: var(--or); border-radius: 3px 3px 0 0; min-height: 2px; position: relative; opacity: .9; }
-.histo div:hover { opacity: 1; outline: 1px solid #fff4; }
-.histo-axe { display: flex; justify-content: space-between; color: var(--doux); font-size: 11px; margin-top: 4px; }
-.barres-h div { display: grid; grid-template-columns: 70px 1fr 50px; gap: 8px; align-items: center; margin: 6px 0; font-size: 13px; }
-.barres-h .jauge { height: 12px; background: var(--panneau2); border-radius: 6px; overflow: hidden; }
-.barres-h .jauge i { display: block; height: 100%; background: var(--bleu); }
-#toast { position: fixed; left: 50%; bottom: 18px; transform: translateX(-50%) translateY(120px); background: var(--panneau2);
-  border: 1px solid var(--or); color: var(--texte); padding: 12px 18px; border-radius: 10px; transition: transform .25s; z-index: 20; max-width: calc(100% - 32px); }
-#toast.vu { transform: translateX(-50%) translateY(0); }
-#toast.erreur { border-color: var(--rouge); }
-.connexion { max-width: 520px; margin: 40px auto; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--fond); color: var(--encre);
+  font: 15px/1.55 var(--sans); font-feature-settings: "cv11", "ss01";
+  -webkit-font-smoothing: antialiased;
+}
+/* grain très léger, comme du papier */
+body::before {
+  content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 0; opacity: .5;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 .45 0 0 0 0 .35 0 0 0 0 .2 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+a { color: var(--ocre-fonce); }
+button, input, textarea, select { font: inherit; color: inherit; }
 .cache { display: none !important; }
-code { background: var(--panneau2); padding: 1px 5px; border-radius: 4px; font-size: 13px; }
-details summary { cursor: pointer; color: var(--doux); }
-.check { display: flex; gap: 8px; align-items: center; margin-top: 10px; } .check input { width: auto; }
-@media (max-width: 560px) { .interrupteur-geant { grid-template-columns: 1fr; } .chiffre b { font-size: 26px; } }
+
+/* ============================================================ structure */
+.appli { position: relative; z-index: 1; display: grid; grid-template-columns: 264px 1fr; min-height: 100vh; }
+.cote {
+  position: sticky; top: 0; height: 100vh; padding: 26px 18px 20px; display: flex; flex-direction: column; gap: 22px;
+  border-right: 1px solid var(--ligne); background: linear-gradient(180deg, var(--fond-2), var(--fond));
+}
+.marque { display: flex; gap: 12px; align-items: center; padding: 0 8px; }
+.embleme { width: 42px; height: 42px; flex: none; }
+.marque b { display: block; font-family: var(--serif); font-weight: 400; font-size: 23px; line-height: 1; letter-spacing: .005em; }
+.marque small { display: block; color: var(--doux); font-size: 12px; margin-top: 4px; letter-spacing: .02em; }
+.menu { display: flex; flex-direction: column; gap: 2px; }
+.menu button {
+  display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 0; background: none;
+  padding: 10px 12px; border-radius: 12px; color: var(--encre-2); font-weight: 500; cursor: pointer;
+  transition: background .18s, color .18s;
+}
+.menu button svg { width: 19px; height: 19px; flex: none; opacity: .8; }
+.menu button:hover { background: var(--surface-2); color: var(--encre); }
+.menu button.actif { background: var(--surface); color: var(--encre); box-shadow: var(--ombre); font-weight: 600; }
+.menu button.actif svg { color: var(--ocre); opacity: 1; }
+.cote-bas { margin-top: auto; display: grid; gap: 10px; padding: 0 6px; }
+.session { font-size: 12.5px; color: var(--doux); display: flex; gap: 8px; align-items: center; }
+.session i { width: 7px; height: 7px; border-radius: 50%; background: var(--acacia); flex: none; }
+.session.lecture i { background: var(--doux); }
+.theme-bascule {
+  display: inline-flex; align-items: center; gap: 8px; border: 1px solid var(--ligne); background: var(--surface);
+  border-radius: 999px; padding: 6px 12px; font-size: 12.5px; color: var(--encre-2); cursor: pointer; width: fit-content;
+}
+.theme-bascule svg { width: 15px; height: 15px; }
+
+.contenu { min-width: 0; padding: 30px clamp(16px, 4vw, 48px) 120px; max-width: 1180px; width: 100%; }
+.entete { display: flex; align-items: flex-end; justify-content: space-between; gap: 16px; flex-wrap: wrap; margin-bottom: 26px; }
+.entete .surtitre { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--doux); font-weight: 600; }
+h1 { font-family: var(--serif); font-weight: 400; font-size: clamp(34px, 4.4vw, 46px); line-height: 1.02; margin: 6px 0 0; letter-spacing: -.005em; }
+h1 em { font-style: italic; color: var(--ocre); }
+h2 { font-family: var(--serif); font-weight: 400; font-size: 25px; line-height: 1.15; margin: 0 0 4px; }
+h3 { font-size: 13px; text-transform: uppercase; letter-spacing: .1em; color: var(--doux); font-weight: 600; margin: 0 0 14px; }
+.sous { color: var(--doux); margin: 0 0 16px; font-size: 14px; }
+
+.statut {
+  display: inline-flex; align-items: center; gap: 10px; padding: 9px 16px 9px 12px; border-radius: 999px;
+  background: var(--surface); border: 1px solid var(--ligne); font-weight: 600; font-size: 13.5px; box-shadow: var(--ombre);
+}
+.statut i { width: 10px; height: 10px; border-radius: 50%; background: var(--doux); position: relative; }
+.statut.ok i { background: var(--acacia); }
+.statut.ok i::after, .statut.ko i::after { content: ""; position: absolute; inset: -4px; border-radius: 50%; border: 2px solid currentColor; opacity: 0; animation: onde 2.2s infinite; }
+.statut.ok { color: var(--acacia); } .statut.ko { color: var(--laterite); }
+.statut.ko i { background: var(--laterite); }
+.statut span { color: var(--encre); }
+@keyframes onde { 0% { transform: scale(.6); opacity: .7; } 100% { transform: scale(1.8); opacity: 0; } }
+
+section.vue { display: none; animation: entree .35s ease both; } section.vue.actif { display: block; }
+@keyframes entree { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+/* ============================================================ composants */
+.grille { display: grid; gap: 18px; grid-template-columns: repeat(12, 1fr); }
+.c12 { grid-column: span 12; } .c8 { grid-column: span 8; } .c7 { grid-column: span 7; } .c6 { grid-column: span 6; }
+.c5 { grid-column: span 5; } .c4 { grid-column: span 4; }
+.carte {
+  background: var(--surface); border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 22px;
+  box-shadow: var(--ombre); min-width: 0;
+}
+.carte.plate { box-shadow: none; background: var(--surface-2); }
+
+/* bandeau d'accueil avec dunes */
+.hero {
+  position: relative; overflow: hidden; border-radius: 24px; padding: clamp(24px, 4vw, 38px); color: #FBF4E6;
+  background: linear-gradient(160deg, #2C3A55 0%, #5B4A57 46%, #C2802B 100%); box-shadow: var(--ombre-haute);
+  min-height: 210px; display: flex; flex-direction: column; justify-content: space-between; gap: 22px;
+}
+.hero.maintenance { background: linear-gradient(160deg, #3A1F17 0%, #7E3424 50%, #D6823A 100%); }
+.hero svg.dunes { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; height: 60%; pointer-events: none; }
+.hero .soleil { position: absolute; right: 12%; top: 22%; width: 86px; height: 86px; border-radius: 50%;
+  background: radial-gradient(circle, #FFE3A6 0%, #F6B95A 55%, rgba(246,185,90,0) 72%); opacity: .9; }
+.hero.maintenance .soleil { background: radial-gradient(circle, #FFD2B0 0%, #F08A4E 55%, rgba(240,138,78,0) 72%); }
+.hero > * { position: relative; }
+.hero .etiquette { font-size: 12px; letter-spacing: .16em; text-transform: uppercase; opacity: .82; font-weight: 600; }
+.hero h2 { font-size: clamp(32px, 4.6vw, 48px); line-height: 1; margin: 8px 0 8px; color: #FFF8EA; }
+.hero p { margin: 0; max-width: 52ch; opacity: .9; }
+.hero .actions { display: flex; gap: 10px; flex-wrap: wrap; }
+.hero .bouton.verre { background: rgba(255,250,240,.16); color: #FFF8EA; border-color: rgba(255,250,240,.35); backdrop-filter: blur(6px); }
+.hero .bouton.verre:hover { background: rgba(255,250,240,.26); }
+
+.kpis { display: grid; gap: 14px; grid-template-columns: repeat(5, 1fr); margin: 18px 0; }
+.kpi { background: var(--surface); border: 1px solid var(--ligne); border-radius: var(--rayon); padding: 18px 18px 16px; box-shadow: var(--ombre); }
+.kpi .ico { width: 34px; height: 34px; border-radius: 10px; display: grid; place-items: center; margin-bottom: 14px; }
+.kpi .ico svg { width: 18px; height: 18px; }
+.kpi b { display: block; font-family: var(--serif); font-weight: 400; font-size: 40px; line-height: 1; font-variant-numeric: lining-nums tabular-nums; }
+.kpi span { color: var(--doux); font-size: 13px; display: block; margin-top: 6px; line-height: 1.35; }
+.t-ocre { background: var(--ocre-pale); color: var(--ocre-fonce); } .t-acacia { background: var(--acacia-pale); color: var(--acacia); }
+.t-nuit { background: var(--nuit-pale); color: var(--nuit); } .t-laterite { background: var(--laterite-pale); color: var(--laterite); }
+
+.courbe-tete { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+.courbe-tete .total { font-family: var(--serif); font-size: 30px; line-height: 1; }
+.courbe-tete .total small { font-family: var(--sans); font-size: 13px; color: var(--doux); margin-left: 6px; }
+#histo { width: 100%; height: 190px; display: block; margin-top: 14px; overflow: visible; }
+#histo .grille-l { stroke: var(--ligne); stroke-dasharray: 2 4; }
+#histo .aire { fill: url(#degrade-aire); }
+#histo .trait { fill: none; stroke: var(--ocre); stroke-width: 2.2; stroke-linejoin: round; stroke-linecap: round; }
+#histo .pt { fill: var(--surface); stroke: var(--ocre); stroke-width: 2; }
+#histo .zone { fill: transparent; cursor: crosshair; }
+#histo .zone:hover + .repere { opacity: 1; }
+#histo .repere { opacity: 0; transition: opacity .12s; pointer-events: none; }
+#histo .repere line { stroke: var(--ocre); stroke-width: 1; stroke-dasharray: 3 3; }
+#histo .repere rect { fill: var(--encre); }
+#histo .repere text { fill: var(--fond); font: 600 11px var(--sans); }
+.histo-axe { display: flex; justify-content: space-between; color: var(--doux); font-size: 12px; margin-top: 8px; }
+
+.versions-barres { display: grid; gap: 12px; }
+.versions-barres .l { display: grid; grid-template-columns: 74px 1fr 36px; gap: 12px; align-items: center; font-size: 13.5px; }
+.versions-barres .jauge { height: 10px; border-radius: 99px; background: var(--surface-2); overflow: hidden; border: 1px solid var(--ligne); }
+.versions-barres .jauge i { display: block; height: 100%; border-radius: 99px; background: linear-gradient(90deg, var(--nuit), var(--ocre)); }
+.versions-barres b { text-align: right; font-variant-numeric: tabular-nums; }
+
+.liste-etat { display: grid; gap: 10px; }
+.liste-etat div { display: flex; justify-content: space-between; gap: 12px; padding-bottom: 10px; border-bottom: 1px dashed var(--ligne); font-size: 14px; }
+.liste-etat div:last-child { border-bottom: 0; padding-bottom: 0; }
+.liste-etat span { color: var(--doux); }
+.liste-etat b { font-weight: 600; text-align: right; }
+
+/* formulaires */
+label.champ { display: block; font-size: 13px; color: var(--encre-2); font-weight: 500; margin: 16px 0 6px; }
+input[type=text], input[type=password], input[type=number], input:not([type]), textarea {
+  width: 100%; background: var(--surface-2); border: 1px solid var(--ligne); border-radius: var(--rayon-s);
+  padding: 11px 13px; transition: border-color .15s, box-shadow .15s, background .15s;
+}
+textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+input:focus, textarea:focus { outline: none; border-color: var(--ocre); background: var(--surface); box-shadow: 0 0 0 4px color-mix(in srgb, var(--ocre) 18%, transparent); }
+.bouton {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--ligne-forte);
+  background: var(--surface); color: var(--encre); padding: 10px 16px; border-radius: 999px; font-weight: 600; font-size: 14px;
+  cursor: pointer; transition: transform .12s, background .15s, border-color .15s, box-shadow .15s; white-space: nowrap;
+}
+.bouton:hover { border-color: var(--ocre); }
+.bouton:active { transform: scale(.98); }
+.bouton svg { width: 16px; height: 16px; }
+.bouton.principal { background: var(--encre); color: var(--fond); border-color: var(--encre); }
+.bouton.principal:hover { box-shadow: 0 6px 18px -8px var(--encre); }
+.bouton.ocre { background: var(--ocre); color: #FFF9EE; border-color: var(--ocre); }
+.bouton.danger { background: var(--laterite); color: #FFF5F0; border-color: var(--laterite); }
+.bouton.vert { background: var(--acacia); color: #F5FBF1; border-color: var(--acacia); }
+.bouton.discret { background: transparent; border-color: transparent; color: var(--encre-2); padding-left: 10px; padding-right: 10px; }
+.bouton.discret:hover { background: var(--surface-2); }
+.bouton.petit { padding: 7px 12px; font-size: 13px; }
+.bouton:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+.ligne { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 16px; }
+.note { color: var(--doux); font-size: 13.5px; line-height: 1.55; }
+.puces { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+.puce { border: 1px solid var(--ligne); background: var(--surface-2); border-radius: 999px; padding: 6px 12px; font-size: 12.5px; cursor: pointer; color: var(--encre-2); }
+.puce:hover { border-color: var(--ocre); color: var(--encre); }
+
+/* grand interrupteur ouvert / maintenance */
+.bascule { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; padding: 6px; border-radius: 20px; background: var(--surface-2); border: 1px solid var(--ligne); }
+.bascule button { border: 0; border-radius: 15px; padding: 16px 10px; font-weight: 700; font-size: 15px; cursor: pointer;
+  background: transparent; color: var(--encre-2); display: flex; align-items: center; justify-content: center; gap: 10px; transition: all .2s; }
+.bascule button svg { width: 18px; height: 18px; }
+.bascule button.on.ouvert { background: var(--acacia); color: var(--fond); box-shadow: 0 8px 20px -10px var(--acacia); }
+.bascule button.on.ferme { background: var(--laterite); color: var(--fond); box-shadow: 0 8px 20px -10px var(--laterite); }
+
+/* aperçu dans un téléphone */
+.telephone { position: relative; aspect-ratio: 19.5 / 9; border-radius: 26px; padding: 10px; background: #0E0D0B;
+  box-shadow: inset 0 0 0 2px #2C2924, var(--ombre-haute); }
+.telephone::before { content: ""; position: absolute; left: 4px; top: 50%; width: 4px; height: 22%; transform: translateY(-50%); border-radius: 4px; background: #23201B; }
+.ecran { position: relative; height: 100%; border-radius: 18px; overflow: hidden; background: #0B0A08;
+  display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 6% 10%; }
+.ecran::before, .ecran::after { content: ""; position: absolute; left: 0; right: 0; height: 8%;
+  background: repeating-linear-gradient(-45deg, var(--c) 0 12px, #15120B 12px 24px); background-size: 34px 100%; animation: bandes 1.4s linear infinite; }
+.ecran::before { top: 0; } .ecran::after { bottom: 0; }
+@keyframes bandes { to { background-position: 34px 0; } }
+.ecran { --c: #F5C04C; }
+.ecran.bloque { --c: #E5533D; }
+.ecran .tri { width: 0; height: 0; border-left: 17px solid transparent; border-right: 17px solid transparent; border-bottom: 29px solid var(--c);
+  margin-bottom: 8px; filter: drop-shadow(0 0 10px var(--c)); animation: pouls 1s ease-in-out infinite alternate; }
+@keyframes pouls { to { opacity: .55; } }
+.ecran .t { color: var(--c); font-weight: 800; font-size: clamp(13px, 2.4vw, 20px); letter-spacing: .04em; }
+.ecran .m { color: #E8DFCC; font-size: clamp(10px, 1.5vw, 13px); margin-top: 6px; max-width: 44ch; line-height: 1.4; }
+.ecran.libre { background: radial-gradient(ellipse at 50% 120%, #C2802B55, transparent 60%), linear-gradient(#2C3A55, #0E1220); }
+.ecran.libre::before, .ecran.libre::after { display: none; }
+.ecran.libre .tri { display: none; }
+.ecran.libre .t { color: #FBF4E6; font-family: var(--serif); font-weight: 400; font-size: clamp(18px, 3vw, 28px); letter-spacing: 0; }
+
+/* tableaux */
+.tableau { overflow-x: auto; margin: 0 -6px; }
+table { width: 100%; border-collapse: collapse; font-size: 14px; }
+th { text-align: left; color: var(--doux); font-weight: 600; font-size: 11.5px; letter-spacing: .08em; text-transform: uppercase; padding: 0 8px 10px; border-bottom: 1px solid var(--ligne); }
+td { padding: 13px 8px; border-bottom: 1px solid var(--ligne); vertical-align: top; }
+tr:last-child td { border-bottom: 0; }
+td .sous-l { color: var(--doux); font-size: 12.5px; margin-top: 2px; max-width: 46ch; }
+.vide { text-align: center; color: var(--doux); padding: 28px 8px !important; }
+.pastille { display: inline-flex; align-items: center; gap: 6px; font-size: 11.5px; font-weight: 600; padding: 3px 10px; border-radius: 999px; white-space: nowrap; }
+.pastille::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+.pastille.or { background: var(--ocre-pale); color: var(--ocre-fonce); }
+.pastille.rouge { background: var(--laterite-pale); color: var(--laterite); }
+.pastille.vert { background: var(--acacia-pale); color: var(--acacia); }
+code, .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size: 12.5px; background: var(--surface-2); border: 1px solid var(--ligne); padding: 1px 6px; border-radius: 6px; }
+.id-appareil { font-family: ui-monospace, Menlo, monospace; letter-spacing: .12em; font-weight: 600; }
+
+.case { display: flex; gap: 12px; align-items: flex-start; margin-top: 16px; cursor: pointer; font-size: 14px; color: var(--encre-2); }
+.case input { appearance: none; width: 40px; height: 24px; border-radius: 99px; background: var(--ligne-forte); position: relative; flex: none; cursor: pointer; transition: background .2s; margin: 0; }
+.case input::after { content: ""; position: absolute; top: 3px; left: 3px; width: 18px; height: 18px; border-radius: 50%; background: #fff; transition: transform .2s; box-shadow: 0 1px 3px rgba(0,0,0,.25); }
+.case input:checked { background: var(--acacia); }
+.case input:checked::after { transform: translateX(16px); }
+
+/* connexion */
+.voile { position: fixed; inset: 0; z-index: 30; display: grid; place-items: center; padding: 16px;
+  background: radial-gradient(ellipse at 70% 10%, #C2802B44, transparent 55%), linear-gradient(170deg, #1C2234, #14120E 70%); }
+.voile .carte { width: min(480px, 100%); padding: 32px; box-shadow: var(--ombre-haute); }
+.voile h2 { font-size: 34px; margin-bottom: 6px; }
+.voile ol { padding-left: 20px; margin: 10px 0 0; } .voile li { margin: 6px 0; }
+details summary { cursor: pointer; color: var(--encre-2); font-weight: 500; margin-top: 18px; }
+
+#toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 140px); z-index: 40; max-width: calc(100% - 32px);
+  background: var(--encre); color: var(--fond); padding: 13px 18px; border-radius: 14px; box-shadow: var(--ombre-haute);
+  display: flex; gap: 10px; align-items: center; transition: transform .3s cubic-bezier(.2,.9,.3,1.2); font-size: 14px; }
+#toast.vu { transform: translate(-50%, 0); }
+#toast.erreur { background: var(--laterite); color: #fff; }
+
+.squelette { color: transparent !important; background: linear-gradient(90deg, var(--surface-2), var(--ligne), var(--surface-2));
+  background-size: 200% 100%; animation: brille 1.4s infinite; border-radius: 8px; }
+@keyframes brille { to { background-position: -200% 0; } }
+
+/* ============================================================ téléphone */
+.barre-bas { display: none; }
+@media (max-width: 1100px) { .kpis { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 900px) {
+  .appli { grid-template-columns: 1fr; }
+  .cote { display: none; }
+  .contenu { padding-top: 18px; padding-bottom: 110px; }
+  .c8, .c7, .c6, .c5, .c4 { grid-column: span 12; }
+  .barre-bas {
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; overflow-x: auto; gap: 2px;
+    padding: 8px 8px calc(8px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--surface) 92%, transparent);
+    backdrop-filter: blur(14px); border-top: 1px solid var(--ligne); scrollbar-width: none;
+  }
+  .barre-bas::-webkit-scrollbar { display: none; }
+  .barre-bas button { flex: 1 0 auto; min-width: 70px; border: 0; background: none; color: var(--doux); display: flex; flex-direction: column;
+    align-items: center; gap: 4px; padding: 6px 6px; border-radius: 12px; font-size: 11px; font-weight: 600; cursor: pointer; }
+  .barre-bas button svg { width: 21px; height: 21px; }
+  .barre-bas button.actif { color: var(--ocre-fonce); background: var(--ocre-pale); }
+  .mobile-marque { display: flex !important; }
+}
+@media (max-width: 560px) {
+  .kpis { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kpi b { font-size: 34px; }
+  .kpi:last-child { grid-column: span 2; }
+  .carte { padding: 18px; }
+  .entete { margin-bottom: 18px; }
+}
+.mobile-marque { display: none; align-items: center; gap: 10px; margin-bottom: 18px; justify-content: space-between; }
+.mobile-marque .marque { padding: 0; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation: none !important; transition: none !important; } }
 </style>
 </head>
 <body>
-<header>
-  <div class="barre">
-    <div class="marque">Sentinelles du Sahel<small>Poste de commandement à distance</small></div>
-    <div id="statut" class="statut-jeu"><i></i><span>…</span></div>
-  </div>
-  <nav id="onglets">
-    <button data-vue="tableau" class="actif">Tableau de bord</button>
-    <button data-vue="etat">Maintenance</button>
-    <button data-vue="maj">Mises à jour</button>
-    <button data-vue="annonce">Annonce</button>
-    <button data-vue="appareils">Appareils</button>
-    <button data-vue="historique">Historique</button>
-    <button data-vue="reglages">Réglages</button>
-  </nav>
-</header>
 
-<main>
-  <!-- ============ CONNEXION ============ -->
-  <div id="connexion" class="carte connexion cache">
-    <h3>Connexion</h3>
-    <p>Collez votre <b>jeton GitHub</b> pour pouvoir modifier l'état du jeu. Il reste dans ce navigateur uniquement.</p>
-    <label for="jeton">Jeton GitHub (github_pat_…)</label>
-    <input id="jeton" type="password" autocomplete="off" placeholder="github_pat_...">
+<!-- ======================================================== icônes -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="i-tableau" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 13h8V3H3zM13 21h8V11h-8zM13 3v6h8V3zM3 21h8v-6H3z"/></symbol>
+    <symbol id="i-maint" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 2 20h20L12 3z"/><path d="M12 10v4M12 17.5v.01"/></symbol>
+    <symbol id="i-maj" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12M7 10l5 5 5-5"/><path d="M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></symbol>
+    <symbol id="i-annonce" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11v2a1 1 0 0 0 1 1h2l5 4V6L6 10H4a1 1 0 0 0-1 1z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M18.5 5.5a9 9 0 0 1 0 13"/></symbol>
+    <symbol id="i-appareil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="6" y="2.5" width="12" height="19" rx="2.5"/><path d="M11 18h2"/></symbol>
+    <symbol id="i-histo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 1 0 3-6.7L3 8"/><path d="M3 3v5h5M12 7v5l3 2"/></symbol>
+    <symbol id="i-reglages" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h10M18 6h2M4 12h4M12 12h8M4 18h12M20 18h0"/><circle cx="16" cy="6" r="2"/><circle cx="10" cy="12" r="2"/><circle cx="18" cy="18" r="2"/></symbol>
+    <symbol id="i-lune" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5z"/></symbol>
+    <symbol id="i-jouer" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.5-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></symbol>
+    <symbol id="i-stop" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="6" width="12" height="12" rx="2"/></symbol>
+    <symbol id="i-rafraichir" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 11a8 8 0 1 0-2.3 5.7"/><path d="M20 4v7h-7"/></symbol>
+    <symbol id="i-gens" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.5a6.5 6.5 0 0 1 3.5 5.5"/></symbol>
+    <symbol id="i-soleil" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></symbol>
+    <symbol id="i-semaine" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="16" rx="2.5"/><path d="M3 9.5h18M8 2.5v4M16 2.5v4"/></symbol>
+    <symbol id="i-fusee" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 19l3-1 1-3M14.5 4.5c3-1 5-1 5-1s0 2-1 5l-6.5 6.5-4-4 6.5-6.5z"/><circle cx="15" cy="9" r="1.3"/></symbol>
+  </defs>
+</svg>
+<svg class="embleme-src" width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs><symbol id="embleme" viewBox="0 0 48 48">
+    <defs><linearGradient id="eg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2C3A55"/><stop offset="1" stop-color="#C2802B"/></linearGradient></defs>
+    <rect width="48" height="48" rx="14" fill="url(#eg)"/>
+    <circle cx="31" cy="18" r="6" fill="#F8C66E"/>
+    <path d="M0 34c8-6 15-6 24-2s16 3 24-3v19H0z" fill="#E7B46A" opacity=".85"/>
+    <path d="M0 40c10-5 18-4 26 0s15 3 22-1v9H0z" fill="#F4D7A4"/>
+  </symbol></defs>
+</svg>
+
+<!-- ======================================================== connexion -->
+<div id="connexion" class="voile cache">
+  <div class="carte">
+    <svg class="embleme" style="width:52px;height:52px;margin-bottom:18px"><use href="#embleme"/></svg>
+    <h2>Poste de commandement</h2>
+    <p class="sous">Sentinelles du Sahel — contrôle du jeu à distance</p>
+    <label class="champ" for="jeton">Jeton GitHub</label>
+    <input id="jeton" type="password" autocomplete="off" placeholder="github_pat_…">
     <div class="ligne">
-      <button class="bouton principal" id="btn-connexion">Se connecter</button>
-      <button class="bouton" id="btn-lecture">Lecture seule</button>
+      <button class="bouton ocre" id="btn-connexion">Se connecter</button>
+      <button class="bouton discret" id="btn-lecture">Consulter sans modifier</button>
     </div>
-    <details style="margin-top:14px"><summary>Créer un jeton (une seule fois)</summary>
+    <p class="note" style="margin-top:14px">Le jeton reste dans ce navigateur uniquement.</p>
+    <details><summary>Créer un jeton (une seule fois)</summary>
       <ol class="note">
-        <li>Ouvrir <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener" style="color:var(--or)">github.com → Fine-grained token</a>.</li>
-        <li>Nom : « Poste de commandement », expiration au choix (1 an).</li>
-        <li>Repository access : <b>Only select repositories</b> → <code>sentinelles-controle</code>.</li>
-        <li>Permissions → Repository → <b>Contents : Read and write</b>.</li>
-        <li>Générer, copier le jeton et le coller ici.</li>
+        <li>Ouvrir <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com → nouveau jeton</a>.</li>
+        <li>Nom : « Poste de commandement », expiration : 1 an.</li>
+        <li><i>Repository access</i> → <b>Only select repositories</b> → <code>sentinelles-controle</code>.</li>
+        <li><b>+ Add permissions</b> → <b>Contents</b> → <b>Read and write</b>.</li>
+        <li><i>Generate token</i>, copier, coller ici.</li>
       </ol>
     </details>
   </div>
+</div>
 
-  <!-- ============ TABLEAU DE BORD ============ -->
-  <section class="vue actif" id="vue-tableau">
-    <h2>Tableau de bord</h2>
-    <div class="chiffres">
-      <div class="chiffre"><b id="n-install">–</b><span>appareils ayant installé le jeu</span></div>
-      <div class="chiffre"><b id="n-jour">–</b><span>appareils actifs aujourd'hui</span></div>
-      <div class="chiffre"><b id="n-7j">–</b><span>appareils actifs (cumul 7 jours)</span></div>
-      <div class="chiffre"><b id="n-lancements">–</b><span>lancements en ligne</span></div>
-      <div class="chiffre"><b id="n-telech">–</b><span>téléchargements d'APK</span></div>
+<div class="appli">
+  <!-- ======================================================== menu latéral -->
+  <aside class="cote">
+    <div class="marque">
+      <svg class="embleme"><use href="#embleme"/></svg>
+      <div><b>Sentinelles</b><small>Poste de commandement</small></div>
     </div>
-    <div class="grille">
-      <div class="carte" style="grid-column: 1 / -1">
-        <h3>Appareils actifs par jour (30 jours)</h3>
-        <div class="histo" id="histo"></div>
-        <div class="histo-axe"><span id="histo-debut"></span><span>aujourd'hui</span></div>
-      </div>
-      <div class="carte">
-        <h3>Appareils par version installée</h3>
-        <div class="barres-h" id="par-version"><span class="note">Chargement…</span></div>
-      </div>
-      <div class="carte">
-        <h3>État actuel</h3>
-        <div id="resume-etat" class="note">Chargement…</div>
-        <div class="ligne"><button class="bouton" id="btn-rafraichir">Actualiser</button></div>
-      </div>
+    <nav class="menu" id="onglets">
+      <button data-vue="tableau" class="actif"><svg><use href="#i-tableau"/></svg>Tableau de bord</button>
+      <button data-vue="etat"><svg><use href="#i-maint"/></svg>Maintenance</button>
+      <button data-vue="maj"><svg><use href="#i-maj"/></svg>Mises à jour</button>
+      <button data-vue="annonce"><svg><use href="#i-annonce"/></svg>Annonce</button>
+      <button data-vue="appareils"><svg><use href="#i-appareil"/></svg>Appareils</button>
+      <button data-vue="historique"><svg><use href="#i-histo"/></svg>Historique</button>
+      <button data-vue="reglages"><svg><use href="#i-reglages"/></svg>Réglages</button>
+    </nav>
+    <div class="cote-bas">
+      <div class="session" id="session-court"><i></i><span>…</span></div>
+      <button class="theme-bascule" data-theme-bascule><svg><use href="#i-lune"/></svg>Thème</button>
     </div>
-    <p class="note">Les chiffres ne comptent que les appareils passés en ligne au moins une fois (le jeu n'exige jamais internet).
-      Un appareil n'est compté qu'une fois à l'installation, une fois par version et une fois par jour. Données anonymes.</p>
-  </section>
+  </aside>
 
-  <!-- ============ MAINTENANCE ============ -->
-  <section class="vue" id="vue-etat">
-    <h2>Maintenance / arrêt du jeu</h2>
-    <div class="grille">
-      <div class="carte">
-        <div class="interrupteur-geant">
-          <button class="bouton vert" id="btn-ouvrir">▶ JEU OUVERT</button>
-          <button class="bouton danger" id="btn-fermer">■ MAINTENANCE</button>
+  <main class="contenu">
+    <div class="mobile-marque">
+      <div class="marque"><svg class="embleme" style="width:36px;height:36px"><use href="#embleme"/></svg>
+        <div><b style="font-size:21px">Sentinelles</b><small>Poste de commandement</small></div></div>
+      <button class="theme-bascule" data-theme-bascule aria-label="Changer de thème"><svg><use href="#i-lune"/></svg></button>
+    </div>
+
+    <!-- ============ TABLEAU DE BORD ============ -->
+    <section class="vue actif" id="vue-tableau">
+      <div class="entete">
+        <div><div class="surtitre" id="date-jour"></div><h1>Bonjour, <em>mon Général</em></h1></div>
+        <div id="statut" class="statut"><i></i><span>…</span></div>
+      </div>
+
+      <div class="hero" id="hero">
+        <div class="soleil"></div>
+        <svg class="dunes" viewBox="0 0 1200 220" preserveAspectRatio="none" aria-hidden="true">
+          <path d="M0 120 C 180 70, 330 80, 520 130 S 860 170, 1200 90 L1200 220 L0 220Z" fill="#000" opacity=".12"/>
+          <path d="M0 160 C 220 110, 420 120, 640 165 S 980 190, 1200 140 L1200 220 L0 220Z" fill="#000" opacity=".16"/>
+          <path d="M0 195 C 260 160, 520 170, 760 198 S 1040 210, 1200 185 L1200 220 L0 220Z" fill="#000" opacity=".2"/>
+        </svg>
+        <div>
+          <div class="etiquette">État du jeu</div>
+          <h2 id="hero-titre">Chargement…</h2>
+          <p id="hero-texte"></p>
         </div>
-        <label for="titre-maint">Titre affiché</label>
-        <input id="titre-maint" maxlength="40">
-        <label for="message-maint">Message aux joueurs</label>
-        <textarea id="message-maint" maxlength="300"></textarea>
-        <div class="ligne">
-          <button class="bouton" data-modele="Nos équipes améliorent le jeu. Revenez dans quelques heures, merci de votre patience.">Modèle : amélioration</button>
-          <button class="bouton" data-modele="Une mise à jour importante est en préparation. Le jeu revient très bientôt !">Modèle : mise à jour</button>
-          <button class="bouton" data-modele="Le jeu est suspendu jusqu'à nouvel ordre.">Modèle : suspension</button>
+        <div class="actions">
+          <button class="bouton verre" data-aller="etat"><svg><use href="#i-maint"/></svg>Gérer la maintenance</button>
+          <button class="bouton verre" data-aller="maj"><svg><use href="#i-maj"/></svg>Mises à jour</button>
         </div>
-        <div class="ligne"><button class="bouton principal" id="btn-enr-maint">Enregistrer le message</button></div>
-        <p class="note">Effet : jeu ouvert → écran plein immédiat en partie (sous 1 à 3 min). Jeu fermé → notification Android
-          dès que le téléphone a internet (quelques minutes, selon Android), et écran de maintenance au lancement,
-          même si le joueur a recoupé internet.</p>
       </div>
-      <div class="carte">
-        <h3>Aperçu sur le téléphone</h3>
-        <div class="apercu" id="apercu"><div class="tri"></div><div class="t" id="ap-titre"></div><div class="m" id="ap-msg"></div></div>
-      </div>
-    </div>
-  </section>
 
-  <!-- ============ MISES À JOUR ============ -->
-  <section class="vue" id="vue-maj">
-    <h2>Mises à jour</h2>
-    <div class="grille">
-      <div class="carte">
-        <h3>Version proposée aux joueurs</h3>
-        <div id="maj-courante" class="note"></div>
-        <label for="version-min">Version minimale (code) — en dessous, mise à jour OBLIGATOIRE</label>
-        <input id="version-min" type="number" min="0">
-        <label for="versions-bloquees">Versions bloquées (codes séparés par des virgules)</label>
-        <input id="versions-bloquees" placeholder="ex. 15, 16">
-        <label class="check"><input type="checkbox" id="maj-mobile"> Télécharger aussi en données mobiles (décoché : wifi seulement, sauf mise à jour obligatoire)</label>
-        <div class="ligne"><button class="bouton principal" id="btn-enr-versions">Enregistrer</button></div>
+      <div class="kpis">
+        <div class="kpi"><div class="ico t-ocre"><svg><use href="#i-gens"/></svg></div><b id="n-install" class="squelette">00</b><span>appareils ont installé le jeu</span></div>
+        <div class="kpi"><div class="ico t-acacia"><svg><use href="#i-soleil"/></svg></div><b id="n-jour" class="squelette">00</b><span>actifs aujourd'hui</span></div>
+        <div class="kpi"><div class="ico t-nuit"><svg><use href="#i-semaine"/></svg></div><b id="n-7j" class="squelette">00</b><span>actifs sur 7 jours (cumul)</span></div>
+        <div class="kpi"><div class="ico t-laterite"><svg><use href="#i-fusee"/></svg></div><b id="n-lancements" class="squelette">00</b><span>lancements en ligne</span></div>
+        <div class="kpi"><div class="ico t-ocre"><svg><use href="#i-maj"/></svg></div><b id="n-telech" class="squelette">00</b><span>téléchargements d'APK</span></div>
       </div>
-      <div class="carte">
-        <h3>Publier une version</h3>
-        <p class="note">Les téléphones téléchargent la nouvelle version tout seuls (reprise après coupure) puis
-          proposent « Installer » en un geste : Android impose ce geste hors Play Store.</p>
-        <p class="note">Sur le PC : <code>outils/controle/publier.sh 0.13.0 "Nouveautés…"</code><br>
-          Le script compile l'APK signé, le met en ligne ici et le propose aux joueurs. GitHub n'accepte pas l'envoi d'APK
-          depuis une page web.</p>
-      </div>
-    </div>
-    <div class="carte" style="margin-top:14px">
-      <h3>Versions publiées</h3>
-      <div class="tableau"><table>
-        <thead><tr><th>Version</th><th>Code</th><th>Date</th><th>Téléch.</th><th>Statut</th><th></th></tr></thead>
-        <tbody id="liste-versions"><tr><td colspan="6" class="note">Chargement…</td></tr></tbody>
-      </table></div>
-    </div>
-  </section>
 
-  <!-- ============ ANNONCE ============ -->
-  <section class="vue" id="vue-annonce">
-    <h2>Annonce aux joueurs</h2>
-    <div class="carte" style="max-width:640px">
-      <p class="note">Message affiché une seule fois au menu du jeu (et en notification si le jeu est fermé). Ne bloque pas le jeu.</p>
-      <label for="annonce-titre">Titre</label>
-      <input id="annonce-titre" maxlength="40" placeholder="ex. Nouvelle opération">
-      <label for="annonce-texte">Texte</label>
-      <textarea id="annonce-texte" maxlength="300" placeholder="ex. L'opération 5 arrive la semaine prochaine !"></textarea>
-      <div class="ligne">
-        <button class="bouton principal" id="btn-annonce">Publier l'annonce</button>
-        <button class="bouton" id="btn-annonce-off">Retirer l'annonce</button>
+      <div class="grille">
+        <div class="carte c8">
+          <div class="courbe-tete">
+            <div><h3 style="margin-bottom:6px">Appareils actifs par jour</h3><div class="note">30 derniers jours</div></div>
+            <div class="total" id="total-30">–<small>sur 30 jours</small></div>
+          </div>
+          <svg id="histo" viewBox="0 0 600 190" preserveAspectRatio="none" role="img" aria-label="Appareils actifs par jour"></svg>
+          <div class="histo-axe"><span id="histo-debut"></span><span>aujourd'hui</span></div>
+        </div>
+        <div class="carte c4">
+          <h3>Par version installée</h3>
+          <div class="versions-barres" id="par-version"><span class="note">Chargement…</span></div>
+        </div>
+        <div class="carte c12 plate">
+          <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
+            <h3 style="margin:0">Résumé</h3>
+            <button class="bouton petit" id="btn-rafraichir"><svg><use href="#i-rafraichir"/></svg>Actualiser</button>
+          </div>
+          <div id="resume-etat" class="liste-etat" style="margin-top:14px"></div>
+        </div>
       </div>
-      <p class="note" id="annonce-etat"></p>
-    </div>
-  </section>
+      <p class="note" style="margin-top:18px">Seuls les appareils passés en ligne au moins une fois sont comptés : le jeu n'exige jamais internet.
+        Un appareil compte une fois à l'installation, une fois par version et une fois par jour. Données anonymes.</p>
+    </section>
 
-  <!-- ============ APPAREILS ============ -->
-  <section class="vue" id="vue-appareils">
-    <h2>Appareils bloqués</h2>
-    <div class="grille">
-      <div class="carte">
-        <h3>Bloquer un appareil</h3>
-        <p class="note">L'identifiant (8 caractères) est affiché dans le jeu : menu → COMMANDES, en bas (« Appareil XXXXXXXX »).</p>
-        <label for="app-id">Identifiant</label>
-        <input id="app-id" maxlength="8" placeholder="ex. 23D4A15F" style="text-transform:uppercase">
-        <label for="app-note">Note (pour vous)</label>
-        <input id="app-note" placeholder="ex. copie piratée, revendeur…">
-        <div class="ligne"><button class="bouton danger" id="btn-bloquer">Bloquer</button></div>
-        <label for="msg-appareil">Message affiché sur l'appareil bloqué</label>
-        <textarea id="msg-appareil" maxlength="300"></textarea>
-        <div class="ligne"><button class="bouton" id="btn-enr-msg-app">Enregistrer le message</button></div>
+    <!-- ============ MAINTENANCE ============ -->
+    <section class="vue" id="vue-etat">
+      <div class="entete"><div><div class="surtitre">Contrôle du jeu</div><h1>Maintenance</h1></div></div>
+      <div class="grille">
+        <div class="carte c6">
+          <div class="bascule">
+            <button id="btn-ouvrir"><svg><use href="#i-jouer"/></svg>Jeu ouvert</button>
+            <button id="btn-fermer"><svg><use href="#i-stop"/></svg>Maintenance</button>
+          </div>
+          <label class="champ" for="titre-maint">Titre affiché</label>
+          <input id="titre-maint" maxlength="40">
+          <label class="champ" for="message-maint">Message aux joueurs</label>
+          <textarea id="message-maint" maxlength="300"></textarea>
+          <div class="puces">
+            <button class="puce" data-modele="Nos équipes améliorent le jeu. Revenez dans quelques heures, merci de votre patience.">Amélioration</button>
+            <button class="puce" data-modele="Une mise à jour importante est en préparation. Le jeu revient très bientôt !">Mise à jour</button>
+            <button class="puce" data-modele="Le jeu est suspendu jusqu'à nouvel ordre.">Suspension</button>
+          </div>
+          <div class="ligne"><button class="bouton principal" id="btn-enr-maint">Enregistrer le message</button></div>
+        </div>
+        <div class="c6" style="display:grid;gap:18px;align-content:start">
+          <div class="carte">
+            <h3>Aperçu sur le téléphone</h3>
+            <div class="telephone"><div class="ecran" id="apercu"><div class="tri"></div><div class="t" id="ap-titre"></div><div class="m" id="ap-msg"></div></div></div>
+          </div>
+          <div class="carte plate">
+            <h3>Ce qui se passe</h3>
+            <div class="liste-etat">
+              <div><span>Jeu ouvert</span><b>écran plein en moins d'une minute</b></div>
+              <div><span>Jeu fermé</span><b>notification dès qu'il y a internet</b></div>
+              <div><span>Lancement suivant</span><b>maintenance, même hors ligne</b></div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="carte">
-        <h3>Liste</h3>
-        <div class="tableau"><table><thead><tr><th>Appareil</th><th>Note</th><th></th></tr></thead>
-          <tbody id="liste-appareils"></tbody></table></div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ============ HISTORIQUE ============ -->
-  <section class="vue" id="vue-historique">
-    <h2>Historique des changements</h2>
-    <div class="carte"><div class="tableau"><table>
-      <thead><tr><th>Date</th><th>Changement</th><th></th></tr></thead>
-      <tbody id="liste-historique"><tr><td colspan="3" class="note">Chargement…</td></tr></tbody>
-    </table></div></div>
-  </section>
+    <!-- ============ MISES À JOUR ============ -->
+    <section class="vue" id="vue-maj">
+      <div class="entete"><div><div class="surtitre">Distribution</div><h1>Mises à jour</h1></div></div>
+      <div class="grille">
+        <div class="carte c7">
+          <h3>Version proposée aux joueurs</h3>
+          <div id="maj-courante"></div>
+          <label class="champ" for="version-min">Version minimale (code) — en dessous, mise à jour obligatoire</label>
+          <input id="version-min" type="number" min="0">
+          <label class="champ" for="versions-bloquees">Versions bloquées (codes séparés par des virgules)</label>
+          <input id="versions-bloquees" placeholder="ex. 15, 16">
+          <label class="case"><input type="checkbox" id="maj-mobile"><span>Télécharger aussi en données mobiles<br><span class="note">Désactivé : wifi seulement, sauf mise à jour obligatoire.</span></span></label>
+          <div class="ligne"><button class="bouton principal" id="btn-enr-versions">Enregistrer</button></div>
+        </div>
+        <div class="carte c5 plate">
+          <h3>Comment ça marche</h3>
+          <p class="note" style="margin-top:0">Les téléphones téléchargent la nouvelle version tout seuls, reprennent après une coupure, puis proposent
+            « Installer » en un geste — Android impose ce geste hors Play Store.</p>
+          <p class="note">Publier depuis le PC :</p>
+          <p><code>outils/controle/publier.sh 0.13.0 "Nouveautés"</code></p>
+          <p class="note">Ajouter <code>--obligatoire</code> pour l'imposer.</p>
+        </div>
+        <div class="carte c12">
+          <h3>Versions publiées</h3>
+          <div class="tableau"><table>
+            <thead><tr><th>Version</th><th>Code</th><th>Date</th><th>Téléch.</th><th>Statut</th><th></th></tr></thead>
+            <tbody id="liste-versions"><tr><td colspan="6" class="vide">Chargement…</td></tr></tbody>
+          </table></div>
+        </div>
+      </div>
+    </section>
 
-  <!-- ============ RÉGLAGES ============ -->
-  <section class="vue" id="vue-reglages">
-    <h2>Réglages</h2>
-    <div class="grille">
-      <div class="carte">
-        <h3>Vérification par le jeu</h3>
-        <label for="intervalle">Intervalle de vérification en partie (secondes, 30 à 3600)</label>
-        <input id="intervalle" type="number" min="30" max="3600">
-        <div class="ligne"><button class="bouton principal" id="btn-enr-reglages">Enregistrer</button></div>
+    <!-- ============ ANNONCE ============ -->
+    <section class="vue" id="vue-annonce">
+      <div class="entete"><div><div class="surtitre">Communication</div><h1>Annonce aux joueurs</h1></div></div>
+      <div class="grille">
+        <div class="carte c7">
+          <p class="note" style="margin-top:0">Affichée une seule fois au menu du jeu, et en notification si le jeu est fermé. Ne bloque pas le jeu.</p>
+          <label class="champ" for="annonce-titre">Titre</label>
+          <input id="annonce-titre" maxlength="40" placeholder="Nouvelle opération">
+          <label class="champ" for="annonce-texte">Texte</label>
+          <textarea id="annonce-texte" maxlength="300" placeholder="L'opération 5 arrive la semaine prochaine !"></textarea>
+          <div class="ligne">
+            <button class="bouton ocre" id="btn-annonce">Publier l'annonce</button>
+            <button class="bouton" id="btn-annonce-off">Retirer</button>
+          </div>
+        </div>
+        <div class="carte c5 plate">
+          <h3>En ce moment</h3>
+          <p id="annonce-etat" style="margin:0"></p>
+        </div>
       </div>
-      <div class="carte">
-        <h3>Session</h3>
-        <p class="note" id="session"></p>
-        <div class="ligne"><button class="bouton" id="btn-deconnexion">Oublier le jeton</button></div>
+    </section>
+
+    <!-- ============ APPAREILS ============ -->
+    <section class="vue" id="vue-appareils">
+      <div class="entete"><div><div class="surtitre">Sécurité</div><h1>Appareils bloqués</h1></div></div>
+      <div class="grille">
+        <div class="carte c5">
+          <h3>Bloquer un appareil</h3>
+          <p class="note" style="margin-top:0">L'identifiant (8 caractères) s'affiche dans le jeu : menu → COMMANDES, en bas.</p>
+          <label class="champ" for="app-id">Identifiant</label>
+          <input id="app-id" maxlength="8" placeholder="23D4A15F" style="text-transform:uppercase;letter-spacing:.14em;font-family:ui-monospace,Menlo,monospace">
+          <label class="champ" for="app-note">Note pour vous</label>
+          <input id="app-note" placeholder="copie piratée, revendeur…">
+          <div class="ligne"><button class="bouton danger" id="btn-bloquer">Bloquer cet appareil</button></div>
+          <label class="champ" for="msg-appareil" style="margin-top:26px">Message affiché sur un appareil bloqué</label>
+          <textarea id="msg-appareil" maxlength="300"></textarea>
+          <div class="ligne"><button class="bouton" id="btn-enr-msg-app">Enregistrer le message</button></div>
+        </div>
+        <div class="carte c7">
+          <h3>Liste</h3>
+          <div class="tableau"><table><thead><tr><th>Appareil</th><th>Note</th><th></th></tr></thead>
+            <tbody id="liste-appareils"></tbody></table></div>
+        </div>
       </div>
-      <div class="carte" style="grid-column: 1 / -1">
-        <h3>Fichier d'état complet (avancé)</h3>
-        <textarea id="json-brut" style="min-height:260px;font-family:ui-monospace,monospace;font-size:13px"></textarea>
-        <div class="ligne"><button class="bouton" id="btn-enr-brut">Enregistrer le JSON</button></div>
+    </section>
+
+    <!-- ============ HISTORIQUE ============ -->
+    <section class="vue" id="vue-historique">
+      <div class="entete"><div><div class="surtitre">Traçabilité</div><h1>Historique</h1></div></div>
+      <div class="carte"><div class="tableau"><table>
+        <thead><tr><th>Date</th><th>Changement</th><th></th></tr></thead>
+        <tbody id="liste-historique"><tr><td colspan="3" class="vide">Chargement…</td></tr></tbody>
+      </table></div></div>
+    </section>
+
+    <!-- ============ RÉGLAGES ============ -->
+    <section class="vue" id="vue-reglages">
+      <div class="entete"><div><div class="surtitre">Configuration</div><h1>Réglages</h1></div></div>
+      <div class="grille">
+        <div class="carte c6">
+          <h3>Vérification par le jeu</h3>
+          <label class="champ" for="intervalle" style="margin-top:0">Intervalle en partie (secondes, 30 à 3600)</label>
+          <input id="intervalle" type="number" min="30" max="3600">
+          <div class="ligne"><button class="bouton principal" id="btn-enr-reglages">Enregistrer</button></div>
+        </div>
+        <div class="carte c6">
+          <h3>Session</h3>
+          <p id="session" style="margin:0"></p>
+          <div class="ligne"><button class="bouton" id="btn-deconnexion">Oublier le jeton</button></div>
+        </div>
+        <div class="carte c12">
+          <h3>Fichier d'état complet (avancé)</h3>
+          <textarea id="json-brut" spellcheck="false" style="min-height:300px;font-family:ui-monospace,Menlo,monospace;font-size:13px"></textarea>
+          <div class="ligne"><button class="bouton" id="btn-enr-brut">Enregistrer le JSON</button></div>
+        </div>
       </div>
-    </div>
-  </section>
-</main>
-<div id="toast"></div>
+    </section>
+  </main>
+</div>
+
+<nav class="barre-bas" id="onglets-bas">
+  <button data-vue="tableau" class="actif"><svg><use href="#i-tableau"/></svg>Accueil</button>
+  <button data-vue="etat"><svg><use href="#i-maint"/></svg>Maintenance</button>
+  <button data-vue="maj"><svg><use href="#i-maj"/></svg>Versions</button>
+  <button data-vue="annonce"><svg><use href="#i-annonce"/></svg>Annonce</button>
+  <button data-vue="appareils"><svg><use href="#i-appareil"/></svg>Appareils</button>
+  <button data-vue="historique"><svg><use href="#i-histo"/></svg>Historique</button>
+  <button data-vue="reglages"><svg><use href="#i-reglages"/></svg>Réglages</button>
+</nav>
+<div id="toast" role="status" aria-live="polite"></div>
 
 <script>
 "use strict";
@@ -309,13 +637,27 @@ const COMPTEUR_DEFAUT = "sds710dea03c8";
 const API = "https://api.github.com/repos/" + DEPOT;
 const ABACUS = "https://abacus.jasoncameron.dev/get/";
 
-let jeton = "";
-try { jeton = localStorage.getItem("pc_jeton") || ""; } catch (e) {}
+const memoire = {
+  lire(k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
+  ecrire(k, v) { try { localStorage.setItem(k, v); } catch (e) {} },
+  effacer(k) { try { localStorage.removeItem(k); } catch (e) {} },
+};
+let jeton = memoire.lire("pc_jeton") || "";
 let lectureSeule = false;
 let etat = null, sha = null, versions = [];
 
 const $ = (id) => document.getElementById(id);
 const echapper = (t) => String(t ?? "").replace(/[&<>"']/g, (c) => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const fmt = (n) => n === null || n === undefined ? "?" : Number(n).toLocaleString("fr-FR");
+
+// ------------------------------------------------------------ thème
+function appliquerTheme(t) { if (t) document.documentElement.dataset.theme = t; else delete document.documentElement.dataset.theme; }
+appliquerTheme(memoire.lire("pc_theme"));
+document.querySelectorAll("[data-theme-bascule]").forEach((b) => b.onclick = () => {
+  const sombre = document.documentElement.dataset.theme
+    ? document.documentElement.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  const t = sombre ? "light" : "dark"; appliquerTheme(t); memoire.ecrire("pc_theme", t);
+});
 
 function toast(msg, erreur) {
   const t = $("toast"); t.textContent = msg; t.className = "vu" + (erreur ? " erreur" : "");
@@ -326,42 +668,42 @@ async function gh(chemin, options = {}) {
   const entetes = { "Accept": "application/vnd.github+json", ...(options.headers || {}) };
   if (jeton) entetes["Authorization"] = "Bearer " + jeton;
   const r = await fetch(chemin.startsWith("http") ? chemin : API + chemin, { ...options, headers: entetes, cache: "no-store" });
-  if (!r.ok) {
-    let detail = ""; try { detail = (await r.json()).message; } catch (e) {}
-    throw new Error(r.status + " " + detail);
-  }
+  if (!r.ok) { let d = ""; try { d = (await r.json()).message; } catch (e) {} throw new Error(r.status + " " + d); }
   return r.status === 204 ? null : r.json();
 }
-
 const b64Decode = (b64) => new TextDecoder().decode(Uint8Array.from(atob(b64.replace(/\n/g, "")), (c) => c.charCodeAt(0)));
 const b64Encode = (txt) => { const o = new TextEncoder().encode(txt); let s = ""; o.forEach((b) => s += String.fromCharCode(b)); return btoa(s); };
 
 async function chargerEtat() {
   const d = await gh("/contents/" + FICHIER + "?ref=main");
-  sha = d.sha; etat = JSON.parse(b64Decode(d.content));
-  remplir();
+  sha = d.sha; etat = JSON.parse(b64Decode(d.content)); remplir();
 }
 
 async function enregistrer(modif, message) {
   if (lectureSeule || !jeton) { toast("Connectez-vous avec un jeton pour modifier.", true); return false; }
   try {
-    await chargerEtat();                       // repartir de la dernière version (évite d'écraser)
+    await chargerEtat();
     const nouveau = structuredClone(etat); modif(nouveau);
     const corps = { message, sha, branch: "main", content: b64Encode(JSON.stringify(nouveau, null, 2) + "\n") };
     const r = await gh("/contents/" + FICHIER, { method: "PUT", body: JSON.stringify(corps) });
     sha = r.content.sha; etat = nouveau; remplir();
-    toast("✔ Enregistré. Les joueurs connectés le reçoivent sous 1 à 3 minutes.");
+    toast("✓ Enregistré — les joueurs connectés le reçoivent en moins d'une minute.");
     chargerHistorique();
     return true;
   } catch (e) { toast("Échec : " + e.message, true); return false; }
 }
 
-// -------------------------------------------------------------- affichage
+// ------------------------------------------------------------ affichage
 function remplir() {
-  const e = etat;
-  const s = $("statut");
-  s.className = "statut-jeu " + (e.actif === false ? "ko" : "ok");
-  s.querySelector("span").textContent = e.actif === false ? "MAINTENANCE" : "JEU OUVERT";
+  const e = etat, ferme = e.actif === false;
+  const s = $("statut"); s.className = "statut " + (ferme ? "ko" : "ok");
+  s.querySelector("span").textContent = ferme ? "Maintenance en cours" : "Jeu ouvert";
+  $("hero").classList.toggle("maintenance", ferme);
+  $("hero-titre").textContent = ferme ? (e.titre_maintenance || "Maintenance en cours") : "Le jeu est ouvert";
+  $("hero-texte").textContent = ferme ? (e.message || "") :
+    (e.lien_apk ? `Version proposée : ${e.nom_version} (code ${e.derniere_version}). ` : "") + "Les joueurs jouent normalement.";
+  $("btn-ouvrir").className = ferme ? "" : "on ouvert";
+  $("btn-fermer").className = ferme ? "on ferme" : "";
   $("titre-maint").value = e.titre_maintenance || "MAINTENANCE EN COURS";
   $("message-maint").value = e.message || "";
   apercu();
@@ -369,48 +711,52 @@ function remplir() {
   $("versions-bloquees").value = (e.versions_bloquees || []).join(", ");
   $("maj-mobile").checked = e.maj_donnees_mobiles !== false;
   $("maj-courante").innerHTML = e.lien_apk
-    ? `Proposée : <b>${echapper(e.nom_version)}</b> (code ${e.derniere_version})<br>${echapper(e.notes || "")}`
-    : "Aucune version proposée pour l'instant.";
+    ? `<div style="display:flex;gap:14px;align-items:center"><div class="kpi" style="box-shadow:none;padding:12px 16px"><b style="font-size:32px">${echapper(e.nom_version)}</b><span>code ${e.derniere_version}</span></div>
+       <p class="note" style="margin:0">${echapper(e.notes || "Aucune note.")}</p></div>`
+    : `<p class="note" style="margin:0">Aucune version proposée pour l'instant.</p>`;
   const a = e.annonce || {};
   $("annonce-titre").value = a.titre || ""; $("annonce-texte").value = a.texte || "";
-  $("annonce-etat").textContent = a.active ? "Annonce en ligne (id " + a.id + ")." : "Aucune annonce en ligne.";
+  $("annonce-etat").innerHTML = a.active
+    ? `<span class="pastille vert">En ligne</span><div style="font-family:var(--serif);font-size:24px;margin:12px 0 4px">${echapper(a.titre)}</div><div class="note">${echapper(a.texte)}</div>`
+    : `<span class="note">Aucune annonce en ligne.</span>`;
   $("msg-appareil").value = e.message_appareil || "";
   $("intervalle").value = e.intervalle || 180;
   $("json-brut").value = JSON.stringify(e, null, 2);
   const bl = e.appareils_bloques || [];
   $("liste-appareils").innerHTML = bl.length ? bl.map((x, i) => {
     const id = typeof x === "string" ? x : x.id, note = typeof x === "string" ? "" : (x.note || "");
-    return `<tr><td><code>${echapper(id)}</code></td><td>${echapper(note)}</td><td><button class="bouton" data-debloquer="${i}">Débloquer</button></td></tr>`;
-  }).join("") : `<tr><td colspan="3" class="note">Aucun appareil bloqué.</td></tr>`;
+    return `<tr><td><span class="id-appareil">${echapper(id)}</span></td><td>${echapper(note) || '<span class="note">—</span>'}</td>
+      <td style="text-align:right"><button class="bouton petit" data-debloquer="${i}">Débloquer</button></td></tr>`;
+  }).join("") : `<tr><td colspan="3" class="vide">Aucun appareil bloqué.</td></tr>`;
   $("resume-etat").innerHTML = [
-    e.actif === false ? `<span class="pastille rouge">MAINTENANCE</span> ${echapper(e.message)}` : `<span class="pastille vert">JEU OUVERT</span>`,
-    e.lien_apk ? `Version proposée : <b>${echapper(e.nom_version)}</b> (code ${e.derniere_version})` : "Pas de mise à jour proposée",
-    `Version minimale : ${e.version_min || 0}`,
-    `Appareils bloqués : ${bl.length}`,
-    (e.annonce && e.annonce.active) ? `Annonce : « ${echapper(e.annonce.titre || e.annonce.texte)} »` : "Pas d'annonce",
-  ].join("<br>");
+    ["État", ferme ? '<span class="pastille rouge">Maintenance</span>' : '<span class="pastille vert">Ouvert</span>'],
+    ["Version proposée", e.lien_apk ? `${echapper(e.nom_version)} · code ${e.derniere_version}` : "aucune"],
+    ["Version minimale", e.version_min || "aucune"],
+    ["Appareils bloqués", bl.length],
+    ["Annonce", (a.active ? echapper(a.titre || a.texte) : "aucune")],
+  ].map(([k, v]) => `<div><span>${k}</span><b>${v}</b></div>`).join("");
   listerVersions();
 }
 
 function apercu() {
   const ferme = etat && etat.actif === false;
-  const a = $("apercu"); a.className = "apercu" + (ferme ? "" : " libre");
-  $("ap-titre").textContent = ferme ? ($("titre-maint").value || "MAINTENANCE EN COURS") : "JEU OUVERT";
+  $("apercu").className = "ecran" + (ferme ? "" : " libre");
+  $("ap-titre").textContent = ferme ? ($("titre-maint").value || "MAINTENANCE EN COURS") : "Sentinelles du Sahel";
   $("ap-msg").textContent = ferme ? $("message-maint").value : "Les joueurs jouent normalement.";
 }
 
 function listerVersions() {
   if (!etat) return;
   $("liste-versions").innerHTML = versions.length ? versions.map((v) => {
-    const statut = [];
-    if (v.code === etat.derniere_version && etat.lien_apk) statut.push('<span class="pastille or">proposée</span>');
-    if (v.code < (etat.version_min || 0) || (etat.versions_bloquees || []).includes(v.code)) statut.push('<span class="pastille rouge">bloquée</span>');
-    if (v.code === etat.version_min) statut.push('<span class="pastille vert">minimum</span>');
-    return `<tr><td><b>${echapper(v.nom)}</b><div class="note">${echapper(v.notes).slice(0, 140)}</div></td><td>${v.code}</td>
-      <td>${new Date(v.date).toLocaleDateString("fr-FR")}</td><td>${v.telech}</td><td>${statut.join(" ")}</td>
-      <td style="white-space:nowrap"><button class="bouton" data-proposer="${v.code}">Proposer</button>
-      <button class="bouton" data-obliger="${v.code}">Obligatoire</button></td></tr>`;
-  }).join("") : `<tr><td colspan="6" class="note">Aucune version publiée. Utilisez publier.sh sur le PC.</td></tr>`;
+    const st = [];
+    if (v.code === etat.derniere_version && etat.lien_apk) st.push('<span class="pastille or">Proposée</span>');
+    if (v.code < (etat.version_min || 0) || (etat.versions_bloquees || []).includes(v.code)) st.push('<span class="pastille rouge">Bloquée</span>');
+    if (v.code === etat.version_min) st.push('<span class="pastille vert">Minimum</span>');
+    return `<tr><td><b>${echapper(v.nom)}</b><div class="sous-l">${echapper(v.notes).slice(0, 140)}</div></td><td>${v.code}</td>
+      <td>${new Date(v.date).toLocaleDateString("fr-FR")}</td><td>${fmt(v.telech)}</td><td>${st.join(" ")}</td>
+      <td style="white-space:nowrap;text-align:right"><button class="bouton petit" data-proposer="${v.code}">Proposer</button>
+      <button class="bouton petit" data-obliger="${v.code}">Obligatoire</button></td></tr>`;
+  }).join("") : `<tr><td colspan="6" class="vide">Aucune version publiée pour l'instant.<br>Utilisez <code>publier.sh</code> sur le PC.</td></tr>`;
 }
 
 async function chargerVersions() {
@@ -421,12 +767,13 @@ async function chargerVersions() {
       return { code: parseInt(String(x.tag_name).replace(/\D/g, ""), 10) || 0, nom: x.name || x.tag_name, notes: x.body || "",
         date: x.published_at || x.created_at, lien: apk ? apk.browser_download_url : "", telech: apk ? apk.download_count : 0 };
     }).filter((v) => v.lien).sort((a, b) => b.code - a.code);
-    $("n-telech").textContent = versions.reduce((s, v) => s + v.telech, 0).toLocaleString("fr-FR");
+    poser("n-telech", versions.reduce((s, v) => s + v.telech, 0));
     listerVersions();
-  } catch (e) { $("n-telech").textContent = "?"; }
+  } catch (e) { poser("n-telech", null); }
 }
 
-// -------------------------------------------------------------- statistiques (compteurs anonymes)
+// ------------------------------------------------------------ statistiques
+function poser(id, n) { const el = $(id); el.classList.remove("squelette"); el.textContent = fmt(n); }
 async function compteur(cle) {
   const ns = (etat && etat.compteur) || COMPTEUR_DEFAUT;
   try {
@@ -435,24 +782,47 @@ async function compteur(cle) {
     return (await r.json()).value || 0;
   } catch (e) { return null; }
 }
-const fmt = (n) => n === null ? "?" : n.toLocaleString("fr-FR");
 const cleJour = (d) => "j-" + d.toISOString().slice(0, 10).replace(/-/g, "");
+
+function dessinerCourbe(valeurs, jours) {
+  const L = 600, H = 190, haut = 14, bas = 10;
+  const max = Math.max(4, ...valeurs.map((v) => v || 0));
+  const x = (i) => (i / (valeurs.length - 1)) * L;
+  const y = (v) => haut + (1 - (v || 0) / max) * (H - haut - bas);
+  const pts = valeurs.map((v, i) => [x(i), y(v)]);
+  let d = `M${pts[0][0]},${pts[0][1]}`;
+  for (let i = 1; i < pts.length; i++) {           // courbe lissée (Catmull-Rom → Bézier)
+    const p0 = pts[i - 2] || pts[i - 1], p1 = pts[i - 1], p2 = pts[i], p3 = pts[i + 1] || p2;
+    d += ` C${p1[0] + (p2[0] - p0[0]) / 6},${p1[1] + (p2[1] - p0[1]) / 6} ${p2[0] - (p3[0] - p1[0]) / 6},${p2[1] - (p3[1] - p1[1]) / 6} ${p2[0]},${p2[1]}`;
+  }
+  const lignes = [0.25, 0.5, 0.75].map((f) => `<line class="grille-l" x1="0" x2="${L}" y1="${haut + f * (H - haut - bas)}" y2="${haut + f * (H - haut - bas)}"/>`).join("");
+  const largeur = L / valeurs.length;
+  const reperes = valeurs.map((v, i) => {
+    const txt = `${jours[i].toLocaleDateString("fr-FR", { day: "numeric", month: "short" })} · ${v ?? "?"}`;
+    const w = txt.length * 6.4 + 16, bx = Math.min(Math.max(x(i) - w / 2, 0), L - w);
+    return `<rect class="zone" x="${x(i) - largeur / 2}" y="0" width="${largeur}" height="${H}"/>
+      <g class="repere"><line x1="${x(i)}" x2="${x(i)}" y1="${haut}" y2="${H}"/><circle class="pt" cx="${x(i)}" cy="${y(v)}" r="4.5"/>
+      <rect x="${bx}" y="${Math.max(y(v) - 34, 0)}" width="${w}" height="22" rx="6"/><text x="${bx + 8}" y="${Math.max(y(v) - 34, 0) + 15}">${txt}</text></g>`;
+  }).join("");
+  $("histo").innerHTML = `<defs><linearGradient id="degrade-aire" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" style="stop-color:var(--ocre);stop-opacity:.32"/><stop offset="1" style="stop-color:var(--ocre);stop-opacity:0"/></linearGradient></defs>
+    ${lignes}<path class="aire" d="${d} L${L},${H} L0,${H} Z"/><path class="trait" d="${d}"/>
+    <circle class="pt" cx="${pts[pts.length - 1][0]}" cy="${pts[pts.length - 1][1]}" r="4.5"/>${reperes}`;
+}
 
 async function chargerStats() {
   const [inst, lanc] = await Promise.all([compteur("installations"), compteur("lancements")]);
-  $("n-install").textContent = fmt(inst); $("n-lancements").textContent = fmt(lanc);
+  poser("n-install", inst); poser("n-lancements", lanc);
   const jours = [];
   for (let i = 29; i >= 0; i--) { const d = new Date(); d.setUTCDate(d.getUTCDate() - i); jours.push(d); }
   const valeurs = await Promise.all(jours.map((d) => compteur(cleJour(d))));
-  $("n-jour").textContent = fmt(valeurs[29]);
-  $("n-7j").textContent = fmt(valeurs.slice(-7).reduce((s, v) => s + (v || 0), 0));
-  const max = Math.max(1, ...valeurs.map((v) => v || 0));
-  $("histo").innerHTML = valeurs.map((v, i) =>
-    `<div style="height:${Math.max(1.5, 100 * (v || 0) / max)}%" title="${jours[i].toLocaleDateString("fr-FR")} : ${v ?? "?"} appareil(s)"></div>`).join("");
-  $("histo-debut").textContent = jours[0].toLocaleDateString("fr-FR");
-  // par version : codes connus (versions publiées + version actuelle et les précédentes)
+  poser("n-jour", valeurs[29]);
+  poser("n-7j", valeurs.slice(-7).reduce((s, v) => s + (v || 0), 0));
+  $("total-30").innerHTML = `${fmt(valeurs.reduce((s, v) => s + (v || 0), 0))}<small>passages sur 30 jours</small>`;
+  dessinerCourbe(valeurs, jours);
+  $("histo-debut").textContent = jours[0].toLocaleDateString("fr-FR", { day: "numeric", month: "long" });
   const codes = new Set(versions.map((v) => v.code));
-  const haut = Math.max(etat ? etat.derniere_version || 0 : 0, ...codes, 17);
+  const haut = Math.max(etat ? etat.derniere_version || 0 : 0, ...codes, 18);
   for (let c = Math.max(1, haut - 8); c <= haut; c++) codes.add(c);
   const liste = [...codes].sort((a, b) => b - a);
   const nb = await Promise.all(liste.map((c) => compteur("v-" + c)));
@@ -460,46 +830,50 @@ async function chargerStats() {
   const m = Math.max(1, ...lignes.map((x) => x[1]));
   const nom = (c) => (versions.find((v) => v.code === c) || {}).nom || ("code " + c);
   $("par-version").innerHTML = lignes.length ? lignes.map(([c, n]) =>
-    `<div><span>${echapper(nom(c))}</span><span class="jauge"><i style="width:${100 * n / m}%"></i></span><b>${n}</b></div>`).join("")
-    : `<span class="note">Aucun appareil compté pour l'instant.</span>`;
+    `<div class="l"><span>${echapper(nom(c))}</span><span class="jauge"><i style="width:${100 * n / m}%"></i></span><b>${n}</b></div>`).join("")
+    : `<p class="note" style="margin:0">Aucun appareil compté pour l'instant. Les chiffres apparaîtront dès que des joueurs lanceront le jeu avec internet.</p>`;
 }
 
-// -------------------------------------------------------------- historique
 async function chargerHistorique() {
   try {
     const c = await gh("/commits?path=" + FICHIER + "&per_page=30");
-    $("liste-historique").innerHTML = c.map((x) => `<tr><td style="white-space:nowrap">${new Date(x.commit.author.date).toLocaleString("fr-FR")}</td>
-      <td>${echapper(x.commit.message)}</td><td><button class="bouton" data-restaurer="${x.sha}">Restaurer</button></td></tr>`).join("");
-  } catch (e) { $("liste-historique").innerHTML = `<tr><td colspan="3" class="note">Indisponible : ${echapper(e.message)}</td></tr>`; }
+    $("liste-historique").innerHTML = c.map((x, i) => `<tr><td style="white-space:nowrap">${new Date(x.commit.author.date).toLocaleString("fr-FR", { dateStyle: "medium", timeStyle: "short" })}</td>
+      <td>${echapper(x.commit.message)}${i === 0 ? ' <span class="pastille vert">Actuel</span>' : ""}</td>
+      <td style="text-align:right">${i === 0 ? "" : `<button class="bouton petit" data-restaurer="${x.sha}">Restaurer</button>`}</td></tr>`).join("");
+  } catch (e) { $("liste-historique").innerHTML = `<tr><td colspan="3" class="vide">Indisponible : ${echapper(e.message)}</td></tr>`; }
 }
 
-// -------------------------------------------------------------- actions
+// ------------------------------------------------------------ navigation et actions
+function aller(vue) {
+  document.querySelectorAll("[data-vue]").forEach((x) => x.classList.toggle("actif", x.dataset.vue === vue));
+  document.querySelectorAll("section.vue").forEach((s) => s.classList.toggle("actif", s.id === "vue-" + vue));
+  memoire.ecrire("pc_vue", vue);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
 function brancher() {
-  $("onglets").addEventListener("click", (ev) => {
-    const b = ev.target.closest("button[data-vue]"); if (!b) return;
-    document.querySelectorAll("#onglets button").forEach((x) => x.classList.toggle("actif", x === b));
-    document.querySelectorAll("section.vue").forEach((s) => s.classList.toggle("actif", s.id === "vue-" + b.dataset.vue));
-    try { localStorage.setItem("pc_vue", b.dataset.vue); } catch (e) {}
-  });
+  document.querySelectorAll("[data-vue]").forEach((b) => b.addEventListener("click", () => aller(b.dataset.vue)));
+  document.querySelectorAll("[data-aller]").forEach((b) => b.addEventListener("click", () => aller(b.dataset.aller)));
   $("btn-connexion").onclick = async () => {
     jeton = $("jeton").value.trim(); lectureSeule = false;
     try {
       const d = await gh("");
       if (!d.permissions || !d.permissions.push) throw new Error("ce jeton ne peut pas écrire dans " + DEPOT);
-      try { localStorage.setItem("pc_jeton", jeton); } catch (e) {}
-      demarrer();
+      memoire.ecrire("pc_jeton", jeton); demarrer();
     } catch (e) { toast("Jeton refusé : " + e.message, true); }
   };
+  $("jeton").addEventListener("keydown", (ev) => { if (ev.key === "Enter") $("btn-connexion").click(); });
   $("btn-lecture").onclick = () => { jeton = ""; lectureSeule = true; demarrer(); };
-  $("btn-deconnexion").onclick = () => { try { localStorage.removeItem("pc_jeton"); } catch (e) {} location.reload(); };
+  $("btn-deconnexion").onclick = () => { memoire.effacer("pc_jeton"); location.hash = ""; location.reload(); };
   $("titre-maint").oninput = apercu; $("message-maint").oninput = apercu;
   document.querySelectorAll("[data-modele]").forEach((b) => b.onclick = () => { $("message-maint").value = b.dataset.modele; apercu(); });
   const texteMaint = (e) => { e.titre_maintenance = $("titre-maint").value.trim() || "MAINTENANCE EN COURS"; e.message = $("message-maint").value.trim(); };
   $("btn-fermer").onclick = () => {
+    if (etat && etat.actif === false) return;
     if (!confirm("Mettre le jeu en MAINTENANCE pour tous les joueurs ?")) return;
     enregistrer((e) => { texteMaint(e); e.actif = false; }, "Maintenance : " + $("message-maint").value.trim().slice(0, 60));
   };
-  $("btn-ouvrir").onclick = () => enregistrer((e) => { e.actif = true; }, "Jeu ouvert");
+  $("btn-ouvrir").onclick = () => { if (etat && etat.actif !== false) return; enregistrer((e) => { e.actif = true; }, "Jeu ouvert"); };
   $("btn-enr-maint").onclick = () => enregistrer(texteMaint, "Message de maintenance modifié");
   $("btn-enr-versions").onclick = () => enregistrer((e) => {
     e.version_min = parseInt($("version-min").value, 10) || 0;
@@ -507,7 +881,7 @@ function brancher() {
     e.versions_bloquees = $("versions-bloquees").value.split(/[,; ]+/).map((x) => parseInt(x, 10)).filter((x) => x > 0);
   }, "Versions : minimum " + $("version-min").value);
   document.addEventListener("click", (ev) => {
-    const t = ev.target;
+    const t = ev.target.closest("button"); if (!t) return;
     if (t.dataset.proposer) {
       const v = versions.find((x) => x.code == t.dataset.proposer);
       enregistrer((e) => { e.derniere_version = v.code; e.nom_version = v.nom; e.lien_apk = v.lien; e.notes = v.notes; }, "Version proposée : " + v.nom);
@@ -548,8 +922,13 @@ function brancher() {
 
 async function demarrer() {
   $("connexion").classList.add("cache");
-  $("session").textContent = lectureSeule ? "Lecture seule (aucune modification possible)." : "Connecté avec un jeton (modifications autorisées).";
-  document.querySelectorAll("main button.principal, main button.danger, main button.vert").forEach((b) => b.disabled = lectureSeule);
+  const texte = lectureSeule ? "Consultation seule" : "Connecté — modifications autorisées";
+  $("session").textContent = lectureSeule ? "Consultation seule : aucune modification possible." : "Connecté avec un jeton : modifications autorisées.";
+  $("session-court").className = "session" + (lectureSeule ? " lecture" : "");
+  $("session-court").querySelector("span").textContent = texte;
+  document.querySelectorAll("main .bouton:not(.discret):not([data-aller]):not(#btn-rafraichir):not(#btn-deconnexion), .bascule button")
+    .forEach((b) => b.disabled = lectureSeule);
+  $("date-jour").textContent = new Date().toLocaleDateString("fr-FR", { weekday: "long", day: "numeric", month: "long" });
   try { await chargerEtat(); } catch (e) { toast("Lecture de l'état impossible : " + e.message, true); return; }
   await chargerVersions();
   chargerStats();
@@ -557,8 +936,10 @@ async function demarrer() {
 }
 
 brancher();
-try { const v = localStorage.getItem("pc_vue"); if (v) document.querySelector(`#onglets button[data-vue="${v}"]`)?.click(); } catch (e) {}
-if (location.hash === "#lecture") { lectureSeule = true; jeton = ""; demarrer(); }   // consultation sans jeton
+// adresse#lecture : consultation sans jeton ; adresse#lecture/maj : directement sur un onglet
+const [ancre, vueAncre] = location.hash.slice(1).split("/");
+const vue = vueAncre || memoire.lire("pc_vue"); if (vue && $("vue-" + vue)) aller(vue);
+if (ancre === "lecture") { lectureSeule = true; jeton = ""; demarrer(); }
 else if (jeton) demarrer(); else $("connexion").classList.remove("cache");
 </script>
 </body>
