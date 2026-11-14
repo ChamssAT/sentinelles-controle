@@ -553,7 +553,8 @@ async function demarrer() {
 
 brancher();
 try { const v = localStorage.getItem("pc_vue"); if (v) document.querySelector(`#onglets button[data-vue="${v}"]`)?.click(); } catch (e) {}
-if (jeton) demarrer(); else $("connexion").classList.remove("cache");
+if (location.hash === "#lecture") { lectureSeule = true; jeton = ""; demarrer(); }   // consultation sans jeton
+else if (jeton) demarrer(); else $("connexion").classList.remove("cache");
 </script>
 </body>
 </html>
