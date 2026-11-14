@@ -283,7 +283,7 @@ code, .mono { font-family: ui-monospace, "SF Mono", Menlo, monospace; font-size:
 .voile ol { padding-left: 20px; margin: 10px 0 0; } .voile li { margin: 6px 0; }
 details summary { cursor: pointer; color: var(--encre-2); font-weight: 500; margin-top: 18px; }
 
-#toast { position: fixed; left: 50%; bottom: 24px; transform: translate(-50%, 140px); z-index: 40; max-width: calc(100% - 32px);
+#toast { position: fixed; left: 50%; bottom: 84px; transform: translate(-50%, 140px); z-index: 40; max-width: calc(100% - 32px);
   background: var(--encre); color: var(--fond); padding: 13px 18px; border-radius: 14px; box-shadow: var(--ombre-haute);
   display: flex; gap: 10px; align-items: center; transition: transform .3s cubic-bezier(.2,.9,.3,1.2); font-size: 14px; }
 #toast.vu { transform: translate(-50%, 0); }
@@ -690,7 +690,15 @@ async function enregistrer(modif, message) {
     toast("✓ Enregistré — les joueurs connectés le reçoivent en moins d'une minute.");
     chargerHistorique();
     return true;
-  } catch (e) { toast("Échec : " + e.message, true); return false; }
+  } catch (e) {
+    const m = String(e.message);
+    if (m.startsWith("403") || m.startsWith("404"))
+      toast("Votre jeton n'a pas le droit d'écrire. Sur GitHub, modifiez-le : Permissions → Contents → « Read and write ».", true);
+    else if (m.startsWith("401")) toast("Jeton expiré ou invalide : Réglages → Oublier le jeton, puis reconnectez-vous.", true);
+    else if (m.startsWith("409")) toast("Quelqu'un a modifié l'état en même temps : réessayez.", true);
+    else toast("Échec : " + m + " (vérifiez la connexion internet)", true);
+    return false;
+  }
 }
 
 // ------------------------------------------------------------ affichage
