@@ -192,6 +192,9 @@ section.vue { display: none; animation: entree .35s ease both; } section.vue.act
 .liste-etat span { color: var(--doux); }
 .liste-etat b { font-weight: 600; text-align: right; }
 
+.drapeau { font-size: 18px; margin-right: 6px; vertical-align: -2px; }
+.modele b { display: block; font-weight: 600; } .modele span { color: var(--doux); font-size: 12.5px; }
+tr.bloque td { background: var(--laterite-pale); }
 /* formulaires */
 label.champ { display: block; font-size: 13px; color: var(--encre-2); font-weight: 500; margin: 16px 0 6px; }
 input[type=text], input[type=password], input[type=number], input:not([type]), textarea {
@@ -457,7 +460,11 @@ details summary { cursor: pointer; color: var(--encre-2); font-weight: 500; marg
           <h3>Par version installée</h3>
           <div class="versions-barres" id="par-version"><span class="note">Chargement…</span></div>
         </div>
-        <div class="carte c12 plate">
+        <div class="carte c4">
+          <h3>Par pays</h3>
+          <div class="versions-barres" id="par-pays"><span class="note">Chargement…</span></div>
+        </div>
+        <div class="carte c8 plate">
           <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap">
             <h3 style="margin:0">Résumé</h3>
             <button class="bouton petit" id="btn-rafraichir"><svg><use href="#i-rafraichir"/></svg>Actualiser</button>
@@ -562,7 +569,23 @@ details summary { cursor: pointer; color: var(--encre-2); font-weight: 500; marg
 
     <!-- ============ APPAREILS ============ -->
     <section class="vue" id="vue-appareils">
-      <div class="entete"><div><div class="surtitre">Sécurité</div><h1>Appareils bloqués</h1></div></div>
+      <div class="entete"><div><div class="surtitre">Joueurs</div><h1>Appareils</h1></div>
+        <div class="statut" id="nb-appareils" style="color:var(--nuit)"><i style="background:var(--nuit)"></i><span>…</span></div></div>
+      <div class="carte" style="margin-bottom:18px">
+        <div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:center">
+          <h3 style="margin:0">Tous les appareils</h3>
+          <input id="filtre-appareils" placeholder="Rechercher : identifiant, modèle, pays…" style="max-width:320px">
+        </div>
+        <div id="code-panneau-zone" class="cache" style="margin-top:14px">
+          <p class="note" style="margin-top:0">Entrez le <b>code secret du panneau</b> (fichier code_panneau.txt, à côté de votre clé de signature).</p>
+          <div class="ligne" style="margin-top:8px"><input id="code-panneau" type="password" placeholder="code du panneau" style="max-width:260px">
+            <button class="bouton ocre" id="btn-code-panneau">Afficher les appareils</button></div>
+        </div>
+        <div class="tableau" style="margin-top:12px"><table>
+          <thead><tr><th>Appareil</th><th>Téléphone</th><th>Pays</th><th>Version</th><th>Dernière connexion</th><th>Connexions</th><th></th></tr></thead>
+          <tbody id="tous-appareils"><tr><td colspan="7" class="vide">Chargement…</td></tr></tbody>
+        </table></div>
+      </div>
       <div class="grille">
         <div class="carte c5">
           <h3>Bloquer un appareil</h3>
@@ -577,7 +600,7 @@ details summary { cursor: pointer; color: var(--encre-2); font-weight: 500; marg
           <div class="ligne"><button class="bouton" id="btn-enr-msg-app">Enregistrer le message</button></div>
         </div>
         <div class="carte c7">
-          <h3>Liste</h3>
+          <h3>Appareils bloqués</h3>
           <div class="tableau"><table><thead><tr><th>Appareil</th><th>Note</th><th></th></tr></thead>
             <tbody id="liste-appareils"></tbody></table></div>
         </div>
@@ -686,7 +709,7 @@ async function enregistrer(modif, message) {
     const nouveau = structuredClone(etat); modif(nouveau);
     const corps = { message, sha, branch: "main", content: b64Encode(JSON.stringify(nouveau, null, 2) + "\n") };
     const r = await gh("/contents/" + FICHIER, { method: "PUT", body: JSON.stringify(corps) });
-    sha = r.content.sha; etat = nouveau; remplir();
+    sha = r.content.sha; etat = nouveau; remplir(); afficherAppareils();
     toast("✓ Enregistré — les joueurs connectés le reçoivent en moins d'une minute.");
     chargerHistorique();
     return true;
@@ -842,6 +865,69 @@ async function chargerStats() {
     : `<p class="note" style="margin:0">Aucun appareil compté pour l'instant. Les chiffres apparaîtront dès que des joueurs lanceront le jeu avec internet.</p>`;
 }
 
+// ------------------------------------------------------------ liste des appareils (Supabase)
+let appareils = null;
+const nomsPays = (() => { try { return new Intl.DisplayNames(["fr"], { type: "region" }); } catch (e) { return null; } })();
+const drapeau = (c) => c && /^[A-Z]{2}$/.test(c) ? String.fromCodePoint(...[...c].map((x) => 127397 + x.charCodeAt(0))) : "🏳️";
+const nomPays = (c) => { if (!c) return "inconnu"; try { return nomsPays ? nomsPays.of(c) : c; } catch (e) { return c; } };
+function ilYa(date) {
+  const s = (Date.now() - new Date(date)) / 1000, r = new Intl.RelativeTimeFormat("fr", { numeric: "auto" });
+  if (s < 60) return "à l'instant";
+  if (s < 3600) return r.format(-Math.round(s / 60), "minute");
+  if (s < 86400) return r.format(-Math.round(s / 3600), "hour");
+  return r.format(-Math.round(s / 86400), "day");
+}
+async function chargerAppareils() {
+  const sb = etat && etat.supabase;
+  if (!sb || !sb.url || !sb.cle) {
+    $("tous-appareils").innerHTML = `<tr><td colspan="7" class="vide">Liste des appareils pas encore activée (projet Supabase à relier).</td></tr>`;
+    $("par-pays").innerHTML = `<p class="note" style="margin:0">Disponible quand la liste des appareils sera activée.</p>`;
+    $("nb-appareils").querySelector("span").textContent = "liste inactive";
+    return;
+  }
+  const code = memoire.lire("pc_code") || "";
+  if (!code) {
+    $("code-panneau-zone").classList.remove("cache"); $("tous-appareils").innerHTML = "";
+    $("par-pays").innerHTML = `<p class="note" style="margin:0">Entrez le code du panneau (onglet Appareils).</p>`;
+    return;
+  }
+  try {
+    const r = await fetch(sb.url.replace(/\/$/, "") + "/rest/v1/rpc/liste_appareils", { method: "POST", cache: "no-store",
+      headers: { apikey: sb.cle, Authorization: "Bearer " + sb.cle, "Content-Type": "application/json" }, body: JSON.stringify({ p_code: code }) });
+    if (!r.ok) {
+      if ([400, 401, 403].includes(r.status)) { memoire.effacer("pc_code"); $("code-panneau-zone").classList.remove("cache"); toast("Code du panneau refusé.", true); }
+      throw new Error("erreur " + r.status);
+    }
+    appareils = await r.json();
+    $("code-panneau-zone").classList.add("cache");
+    afficherAppareils();
+  } catch (e) { $("tous-appareils").innerHTML = `<tr><td colspan="7" class="vide">Liste indisponible (${echapper(e.message)}).</td></tr>`; }
+}
+function afficherAppareils() {
+  if (!appareils || !etat) return;
+  const bloques = new Set((etat.appareils_bloques || []).map((x) => String(x.id || x).toUpperCase()));
+  const f = $("filtre-appareils").value.trim().toLowerCase();
+  const liste = appareils.filter((a) => !f || [a.id, a.modele, a.pays, nomPays(a.pays), a.nom_version, a.systeme].join(" ").toLowerCase().includes(f));
+  $("nb-appareils").querySelector("span").textContent = `${fmt(appareils.length)} appareil${appareils.length > 1 ? "s" : ""}`;
+  $("tous-appareils").innerHTML = liste.length ? liste.map((a) => {
+    const b = bloques.has(a.id);
+    return `<tr class="${b ? "bloque" : ""}"><td><span class="id-appareil">${echapper(a.id)}</span></td>
+      <td class="modele"><b>${echapper(a.modele || "?")}</b><span>${echapper(a.systeme || "")}</span></td>
+      <td style="white-space:nowrap"><span class="drapeau">${drapeau(a.pays)}</span>${echapper(nomPays(a.pays))}</td>
+      <td>${echapper(a.nom_version || "")}<div class="sous-l">code ${a.version ?? "?"}</div></td>
+      <td title="${new Date(a.derniere_connexion).toLocaleString("fr-FR")}">${ilYa(a.derniere_connexion)}<div class="sous-l">depuis le ${new Date(a.premiere_connexion).toLocaleDateString("fr-FR")}</div></td>
+      <td>${fmt(a.connexions)}</td>
+      <td style="text-align:right">${b ? '<span class="pastille rouge">Bloqué</span>' : `<button class="bouton petit" data-bloquer-id="${echapper(a.id)}" data-modele-app="${echapper(a.modele || "")}">Bloquer</button>`}</td></tr>`;
+  }).join("") : `<tr><td colspan="7" class="vide">${appareils.length ? "Aucun appareil ne correspond." : "Aucun appareil pour l'instant."}</td></tr>`;
+  const parPays = {};
+  appareils.forEach((a) => { parPays[a.pays || ""] = (parPays[a.pays || ""] || 0) + 1; });
+  const lignes = Object.entries(parPays).sort((x, y) => y[1] - x[1]).slice(0, 8);
+  const m = Math.max(1, ...lignes.map((x) => x[1]));
+  $("par-pays").innerHTML = lignes.length ? lignes.map(([c, n]) =>
+    `<div class="l" style="grid-template-columns:120px 1fr 36px"><span><span class="drapeau">${drapeau(c)}</span>${echapper(nomPays(c))}</span><span class="jauge"><i style="width:${100 * n / m}%"></i></span><b>${n}</b></div>`).join("")
+    : `<p class="note" style="margin:0">Aucun appareil pour l'instant.</p>`;
+}
+
 async function chargerHistorique() {
   try {
     const c = await gh("/commits?path=" + FICHIER + "&per_page=30");
@@ -926,6 +1012,15 @@ function brancher() {
     enregistrer((e) => { Object.keys(e).forEach((k) => delete e[k]); Object.assign(e, d); }, "Modification manuelle du fichier d'état");
   };
   $("btn-rafraichir").onclick = () => demarrer();
+  $("btn-code-panneau").onclick = () => { memoire.ecrire("pc_code", $("code-panneau").value.trim()); chargerAppareils(); };
+  $("code-panneau").addEventListener("keydown", (ev) => { if (ev.key === "Enter") $("btn-code-panneau").click(); });
+  $("filtre-appareils").oninput = afficherAppareils;
+  document.addEventListener("click", (ev) => {
+    const t = ev.target.closest("button[data-bloquer-id]"); if (!t) return;
+    const id = t.dataset.bloquerId;
+    if (!confirm("Bloquer l'appareil " + id + " (" + t.dataset.modeleApp + ") ?")) return;
+    enregistrer((e) => { e.appareils_bloques = (e.appareils_bloques || []).filter((x) => (x.id || x) !== id); e.appareils_bloques.push({ id, note: t.dataset.modeleApp }); }, "Appareil bloqué : " + id);
+  });
 }
 
 async function demarrer() {
@@ -941,6 +1036,7 @@ async function demarrer() {
   await chargerVersions();
   chargerStats();
   chargerHistorique();
+  chargerAppareils();
 }
 
 brancher();
