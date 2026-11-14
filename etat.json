@@ -11,6 +11,6 @@
   "annonce": {"active": false, "id": "", "titre": "", "texte": ""},
   "appareils_bloques": [],
   "message_appareil": "Cet appareil n'est plus autorisé à lancer le jeu. Contactez le développeur.",
-  "intervalle": 180,
+  "intervalle": 181,
   "compteur": "sds710dea03c8"
 }
