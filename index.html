@@ -205,10 +205,13 @@ details summary { cursor: pointer; color: var(--doux); }
         <input id="version-min" type="number" min="0">
         <label for="versions-bloquees">Versions bloquées (codes séparés par des virgules)</label>
         <input id="versions-bloquees" placeholder="ex. 15, 16">
+        <label class="check"><input type="checkbox" id="maj-mobile"> Télécharger aussi en données mobiles (sinon : wifi seulement ; une mise à jour obligatoire se télécharge toujours)</label>
         <div class="ligne"><button class="bouton principal" id="btn-enr-versions">Enregistrer</button></div>
       </div>
       <div class="carte">
         <h3>Publier une version</h3>
+        <p class="note">Les téléphones téléchargent la nouvelle version tout seuls (reprise après coupure) puis
+          proposent « Installer » en un geste : Android impose ce geste hors Play Store.</p>
         <p class="note">Sur le PC : <code>outils/controle/publier.sh 0.13.0 "Nouveautés…"</code><br>
           Le script compile l'APK signé, le met en ligne ici et le propose aux joueurs. GitHub n'accepte pas l'envoi d'APK
           depuis une page web.</p>
@@ -364,6 +367,7 @@ function remplir() {
   apercu();
   $("version-min").value = e.version_min || 0;
   $("versions-bloquees").value = (e.versions_bloquees || []).join(", ");
+  $("maj-mobile").checked = !!e.maj_donnees_mobiles;
   $("maj-courante").innerHTML = e.lien_apk
     ? `Proposée : <b>${echapper(e.nom_version)}</b> (code ${e.derniere_version})<br>${echapper(e.notes || "")}`
     : "Aucune version proposée pour l'instant.";
@@ -499,6 +503,7 @@ function brancher() {
   $("btn-enr-maint").onclick = () => enregistrer(texteMaint, "Message de maintenance modifié");
   $("btn-enr-versions").onclick = () => enregistrer((e) => {
     e.version_min = parseInt($("version-min").value, 10) || 0;
+    e.maj_donnees_mobiles = $("maj-mobile").checked;
     e.versions_bloquees = $("versions-bloquees").value.split(/[,; ]+/).map((x) => parseInt(x, 10)).filter((x) => x > 0);
   }, "Versions : minimum " + $("version-min").value);
   document.addEventListener("click", (ev) => {
