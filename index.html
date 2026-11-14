@@ -893,7 +893,8 @@ async function chargerAppareils() {
   }
   try {
     const r = await fetch(sb.url.replace(/\/$/, "") + "/rest/v1/rpc/liste_appareils", { method: "POST", cache: "no-store",
-      headers: { apikey: sb.cle, Authorization: "Bearer " + sb.cle, "Content-Type": "application/json" }, body: JSON.stringify({ p_code: code }) });
+      headers: { apikey: sb.cle, "Content-Type": "application/json", ...(sb.cle.startsWith("eyJ") ? { Authorization: "Bearer " + sb.cle } : {}) },
+      body: JSON.stringify({ p_code: code }) });
     if (!r.ok) {
       if ([400, 401, 403].includes(r.status)) { memoire.effacer("pc_code"); $("code-panneau-zone").classList.remove("cache"); toast("Code du panneau refusé.", true); }
       throw new Error("erreur " + r.status);
