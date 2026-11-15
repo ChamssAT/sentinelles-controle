@@ -18,5 +18,16 @@
   "message_appareil": "Cet appareil n'est plus autorisé à lancer le jeu. Contactez le développeur.",
   "intervalle": 180,
   "compteur": "sds710dea03c8",
-  "maj_donnees_mobiles": true
+  "maj_donnees_mobiles": true,
+  "pubs": {
+    "actives": true,
+    "recompense": "ca-app-pub-5302621376889233/7269711731",
+    "interstitiel": "ca-app-pub-5302621376889233/6270510749",
+    "intervalle": 240,
+    "bonus_frappes": 2,
+    "bonus_mortier": 2,
+    "appareils_test": [
+      "152B472F"
+    ]
+  }
 }
