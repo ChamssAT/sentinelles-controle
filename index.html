@@ -527,6 +527,13 @@ details summary { cursor: pointer; color: var(--encre-2); font-weight: 500; marg
           <label class="case"><input type="checkbox" id="maj-mobile"><span>Télécharger aussi en données mobiles<br><span class="note">Désactivé : wifi seulement, sauf mise à jour obligatoire.</span></span></label>
           <div class="ligne"><button class="bouton principal" id="btn-enr-versions">Enregistrer</button></div>
         </div>
+        <div class="carte c12">
+          <h3>Mise à jour légère (patch)</h3>
+          <div id="patch-courant"></div>
+          <div class="ligne"><button class="bouton" id="btn-retirer-patch">Retirer la mise à jour légère</button></div>
+          <p class="note">Quelques Ko à quelques Mo au lieu de l'APK entier : téléchargée toute seule, appliquée au redémarrage
+            du jeu. Publier depuis le PC : <code>outils/controle/publier_patch.sh "Nouveautés"</code>.</p>
+        </div>
         <div class="carte c5 plate">
           <h3>Comment ça marche</h3>
           <p class="note" style="margin-top:0">Les téléphones téléchargent la nouvelle version tout seuls, reprennent après une coupure, puis proposent
@@ -745,6 +752,12 @@ function remplir() {
     ? `<div style="display:flex;gap:14px;align-items:center"><div class="kpi" style="box-shadow:none;padding:12px 16px"><b style="font-size:32px">${echapper(e.nom_version)}</b><span>code ${e.derniere_version}</span></div>
        <p class="note" style="margin:0">${echapper(e.notes || "Aucune note.")}</p></div>`
     : `<p class="note" style="margin:0">Aucune version proposée pour l'instant.</p>`;
+  const pt = e.patch;
+  $("patch-courant").innerHTML = pt && pt.numero
+    ? `<div style="display:flex;gap:14px;align-items:center;flex-wrap:wrap"><span class="pastille vert">En ligne</span>
+       <b>Mise à jour légère n° ${pt.numero}</b><span class="note">pour l'APK code ${pt.base} · ${Math.max(1, Math.round((pt.taille || 0) / 1024))} Ko</span></div>
+       <p class="note" style="margin:8px 0 0">${echapper(pt.notes || "")}</p>`
+    : `<p class="note" style="margin:0">Aucune mise à jour légère en ligne.</p>`;
   const a = e.annonce || {};
   $("annonce-titre").value = a.titre || ""; $("annonce-texte").value = a.texte || "";
   $("annonce-etat").innerHTML = a.active
@@ -763,6 +776,7 @@ function remplir() {
     ["État", ferme ? '<span class="pastille rouge">Maintenance</span>' : '<span class="pastille vert">Ouvert</span>'],
     ["Version proposée", e.lien_apk ? `${echapper(e.nom_version)} · code ${e.derniere_version}` : "aucune"],
     ["Version minimale", e.version_min || "aucune"],
+    ["Mise à jour légère", e.patch && e.patch.numero ? `n° ${e.patch.numero} (APK ${e.patch.base})` : "aucune"],
     ["Appareils bloqués", bl.length],
     ["Annonce", (a.active ? echapper(a.titre || a.texte) : "aucune")],
   ].map(([k, v]) => `<div><span>${k}</span><b>${v}</b></div>`).join("");
@@ -970,6 +984,10 @@ function brancher() {
   };
   $("btn-ouvrir").onclick = () => { if (etat && etat.actif !== false) return; enregistrer((e) => { e.actif = true; }, "Jeu ouvert"); };
   $("btn-enr-maint").onclick = () => enregistrer(texteMaint, "Message de maintenance modifié");
+  $("btn-retirer-patch").onclick = () => {
+    if (!confirm("Retirer la mise à jour légère ? Les joueurs qui l'ont déjà la gardent ; les autres ne la téléchargeront plus.")) return;
+    enregistrer((e) => { delete e.patch; }, "Mise à jour légère retirée");
+  };
   $("btn-enr-versions").onclick = () => enregistrer((e) => {
     e.version_min = parseInt($("version-min").value, 10) || 0;
     e.maj_donnees_mobiles = $("maj-mobile").checked;
