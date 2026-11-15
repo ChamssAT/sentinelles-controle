@@ -527,13 +527,6 @@ details summary { cursor: pointer; color: var(--encre-2); font-weight: 500; marg
           <label class="case"><input type="checkbox" id="maj-mobile"><span>Télécharger aussi en données mobiles<br><span class="note">Désactivé : wifi seulement, sauf mise à jour obligatoire.</span></span></label>
           <div class="ligne"><button class="bouton principal" id="btn-enr-versions">Enregistrer</button></div>
         </div>
-        <div class="carte c12">
-          <h3>Mise à jour légère (patch)</h3>
-          <div id="patch-courant"></div>
-          <div class="ligne"><button class="bouton" id="btn-retirer-patch">Retirer la mise à jour légère</button></div>
-          <p class="note">Quelques Ko à quelques Mo au lieu de l'APK entier : téléchargée toute seule, appliquée au redémarrage
-            du jeu. Publier depuis le PC : <code>outils/controle/publier_patch.sh "Nouveautés"</code>.</p>
-        </div>
         <div class="carte c5 plate">
           <h3>Comment ça marche</h3>
           <p class="note" style="margin-top:0">Les téléphones téléchargent la nouvelle version tout seuls, reprennent après une coupure, puis proposent
@@ -541,6 +534,13 @@ details summary { cursor: pointer; color: var(--encre-2); font-weight: 500; marg
           <p class="note">Publier depuis le PC :</p>
           <p><code>outils/controle/publier.sh 0.13.0 "Nouveautés"</code></p>
           <p class="note">Ajouter <code>--obligatoire</code> pour l'imposer.</p>
+        </div>
+        <div class="carte c12">
+          <h3>Mise à jour légère (patch)</h3>
+          <div id="patch-courant"></div>
+          <div class="ligne"><button class="bouton" id="btn-retirer-patch">Retirer la mise à jour légère</button></div>
+          <p class="note">Quelques Ko à quelques Mo au lieu de l'APK entier : téléchargée toute seule, appliquée au redémarrage
+            du jeu. Publier depuis le PC : <code>outils/controle/publier_patch.sh "Nouveautés"</code>.</p>
         </div>
         <div class="carte c12">
           <h3>Versions publiées</h3>
