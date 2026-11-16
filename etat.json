@@ -14,12 +14,7 @@
     "titre": "Annonce",
     "texte": "salut"
   },
-  "appareils_bloques": [
-    {
-      "id": "B7F1EA65",
-      "note": "TECNO BG6i"
-    }
-  ],
+  "appareils_bloques": [],
   "message_appareil": "Cet appareil n'est plus autorisé à lancer le jeu. Contactez le développeur.",
   "intervalle": 180,
   "compteur": "sds710dea03c8",
