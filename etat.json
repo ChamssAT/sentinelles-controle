@@ -9,7 +9,7 @@
   "lien_apk": "https://github.com/ChamssAT/sentinelles-controle/releases/download/v32/AES-Sentinelles-0.16.0.apk",
   "notes": "Nouveautés : ordre CHASSE, carte tactique tactile, entraînement des soldats, drone (mitrailleuse, vol stable, utilisable depuis un véhicule, 5 bombes massives), jeu à plusieurs plus visible avec tutoriel, combats plus fluides.",
   "annonce": {
-    "active": true,
+    "active": false,
     "id": "amwjw7y80",
     "titre": "Annonce",
     "texte": "salut"
