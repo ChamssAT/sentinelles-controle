@@ -37,5 +37,9 @@
     "sha256": "831ff5ae2abbd4da52b0d7d5db7be6a114b505fdd4583d5275fc36ce7781b3f8",
     "taille": 185344,
     "notes": "Carte : glisser ne donne plus d'ordre ; arme du drone renommée MITRAILLEUSE"
+  },
+  "supabase": {
+    "url": "https://vfodwtswrjixxcyknggr.supabase.co",
+    "cle": "sb_publishable_47GqMSfvpHhDW8u9NV6svQ_mMy6Wjtz"
   }
 }
