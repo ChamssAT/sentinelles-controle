@@ -967,14 +967,17 @@ function afficherAppareils() {
   const bloques = new Set((etat.appareils_bloques || []).map((x) => String(x.id || x).toUpperCase()));
   const f = $("filtre-appareils").value.trim().toLowerCase();
   const liste = appareils.filter((a) => !f || [a.id, a.modele, a.pays, nomPays(a.pays), a.nom_version, a.systeme].join(" ").toLowerCase().includes(f));
-  $("nb-appareils").querySelector("span").textContent = `${fmt(appareils.length)} appareil${appareils.length > 1 ? "s" : ""}`;
+  // « en ligne » : signe de vie depuis moins de 6 min (le jeu ouvert en envoie un toutes les 4 min)
+  const enLigne = (a) => Date.now() - new Date(a.derniere_connexion).getTime() < 6 * 60 * 1000;
+  const nbEnLigne = appareils.filter(enLigne).length;
+  $("nb-appareils").querySelector("span").textContent = `${fmt(appareils.length)} appareil${appareils.length > 1 ? "s" : ""} · ${fmt(nbEnLigne)} en ligne`;
   $("tous-appareils").innerHTML = liste.length ? liste.map((a) => {
     const b = bloques.has(a.id);
     return `<tr class="${b ? "bloque" : ""}"><td><span class="id-appareil">${echapper(a.id)}</span></td>
       <td class="modele"><b>${echapper(a.modele || "?")}</b><span>${echapper(a.systeme || "")}</span></td>
       <td style="white-space:nowrap"><span class="drapeau">${drapeau(a.pays)}</span>${echapper(nomPays(a.pays))}</td>
       <td>${echapper(a.nom_version || "")}<div class="sous-l">code ${a.version ?? "?"}</div></td>
-      <td title="${new Date(a.derniere_connexion).toLocaleString("fr-FR")}">${ilYa(a.derniere_connexion)}<div class="sous-l">depuis le ${new Date(a.premiere_connexion).toLocaleDateString("fr-FR")}</div></td>
+      <td title="${new Date(a.derniere_connexion).toLocaleString("fr-FR")}">${enLigne(a) ? '<b style="color:#2f9e44">● en ligne</b>' : ilYa(a.derniere_connexion)}<div class="sous-l">depuis le ${new Date(a.premiere_connexion).toLocaleDateString("fr-FR")}</div></td>
       <td>${fmt(a.connexions)}</td>
       <td style="text-align:right">${b ? '<span class="pastille rouge">Bloqué</span>' : `<button class="bouton petit" data-bloquer-id="${echapper(a.id)}" data-modele-app="${echapper(a.modele || "")}">Bloquer</button>`}</td></tr>`;
   }).join("") : `<tr><td colspan="7" class="vide">${appareils.length ? "Aucun appareil ne correspond." : "Aucun appareil pour l'instant."}</td></tr>`;
