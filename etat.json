@@ -4,10 +4,10 @@
   "message": "Le jeu est temporairement indisponible. Réessayez plus tard.",
   "version_min": 0,
   "versions_bloquees": [],
-  "derniere_version": 29,
-  "nom_version": "0.14.0",
-  "lien_apk": "https://github.com/ChamssAT/sentinelles-controle/releases/download/v29/AES-Sentinelles-0.14.0.apk",
-  "notes": "Nouvelles missions au Mali et au Burkina, section mixte AES, campagne.",
+  "derniere_version": 32,
+  "nom_version": "0.16.0",
+  "lien_apk": "https://github.com/ChamssAT/sentinelles-controle/releases/download/v32/AES-Sentinelles-0.16.0.apk",
+  "notes": "Nouveautés : ordre CHASSE, carte tactique tactile, entraînement des soldats, drone (mitrailleuse, vol stable, utilisable depuis un véhicule, 5 bombes massives), jeu à plusieurs plus visible avec tutoriel, combats plus fluides.",
   "annonce": {
     "active": false,
     "id": "amwgxiwbt",
@@ -29,14 +29,6 @@
     "appareils_test": [
       "152B472F"
     ]
-  },
-  "patch": {
-    "base": 31,
-    "numero": 2,
-    "lien": "https://github.com/ChamssAT/sentinelles-controle/releases/download/v31-patchs/patch-31-2.pck",
-    "sha256": "831ff5ae2abbd4da52b0d7d5db7be6a114b505fdd4583d5275fc36ce7781b3f8",
-    "taille": 185344,
-    "notes": "Carte : glisser ne donne plus d'ordre ; arme du drone renommée MITRAILLEUSE"
   },
   "supabase": {
     "url": "https://vfodwtswrjixxcyknggr.supabase.co",
