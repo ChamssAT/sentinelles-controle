@@ -27,7 +27,8 @@
     "bonus_frappes": 2,
     "bonus_mortier": 2,
     "appareils_test": [
-      "152B472F"
+      "152B472F",
+      "B7F1EA65"
     ]
   },
   "supabase": {
